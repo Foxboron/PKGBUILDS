@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+for i in $(find . -mindepth 1 -maxdepth 1 -type d -not -path '*/\.*'); do
+  cd $i
+  pkgclean --purge -c
+  cd ..
+done
