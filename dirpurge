@@ -4,4 +4,6 @@ for i in $(find . -mindepth 1 -maxdepth 1 -type d -not -path '*/\.*'); do
   cd $i
   pkgclean --purge -c
   cd ..
+  # We dont want it to cleane files we are tracking
+  git reset --hard
 done
