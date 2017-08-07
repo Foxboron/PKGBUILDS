@@ -2,8 +2,8 @@
 
 pkgname=auracle-git
 _pkgname=auracle
-pkgver=r8.89398f2
-pkgrel=3
+pkgver=r23.90b1793
+pkgrel=1
 pkgdesc='Next generation cower'
 arch=('x86_64' 'i686')
 url="https://github.com/falconindy/auracle.git"
@@ -21,7 +21,11 @@ pkgver() {
 
 build () {
   cd "$_pkgname"
-  meson build --prefix /usr -D buildtype=release
+
+  if [[ ! -d build ]]; then
+    meson build --prefix /usr -D buildtype=release
+  fi
+
   ninja -C build
 }
 
