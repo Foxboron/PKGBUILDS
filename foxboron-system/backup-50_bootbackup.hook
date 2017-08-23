@@ -1,0 +1,12 @@
+[Trigger]
+Operation = Upgrade
+Operation = Install
+Operation = Remove
+Type = Package
+Target = linux
+
+[Action]
+Depends = rsync
+Description = Backing up pre boot /boot...
+When = PreTransaction
+Exec = /usr/bin/snap-boot-backup pre

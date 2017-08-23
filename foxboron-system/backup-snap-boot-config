@@ -1,0 +1,3 @@
+TITLE="Arch Linux"
+PRE_OPTIONS=""cryptdevice=UUID=XXXXXXX:lvm root=UUID=XXXX"
+POST_OPTIONS="rw quiet"

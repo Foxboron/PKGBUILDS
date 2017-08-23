@@ -1,0 +1,5 @@
+/var/cache/*
+/var/lib/archbuild/*
+/var/lib/build/*
+*/Downloads
+*/.cache

@@ -1,0 +1,10 @@
+[Unit]
+Description=Default timer - %i
+
+[Timer]
+OnCalendar=%i
+Persistent=true
+Unit=timer@%i.target
+
+[Install]
+WantedBy=timers.target

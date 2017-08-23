@@ -1,0 +1,72 @@
+# Maintainer: Morten Linderud <morten@linderud.pw>
+
+pkgbase=foxboron-system
+pkgname=(base-system theia-system foxboron-timers foxboron-backup foxboron-fontconfig)
+pkgver=1
+pkgrel=1
+pkgdesc="System configs"
+arch=("any")
+url="https://velox.pw/"
+license=('MIT')
+source=('timers-timer@.timer'
+        'timers-timer@.target'
+        'backup-backup'
+        'backup-sudoers'
+        'backup-backup@.service'
+        'backup-snapper-filter'
+        'backup-snapper-backup.service'
+        'backup-snap-boot-backup'
+        'backup-50_bootbackup.hook'
+        'backup-zz_bootback.hook'
+        'backup-snap-boot-config'
+        'system-sudoers'
+        'theia-capslock.hwdb'
+        'fontconfig-local.conf')
+
+sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
+            '148cffd0796d1fa2b1d9bba9274493bd9cfc2d5a524ffc0e03fc2d6e8e2c53fb'
+            '19d6e6a51c1d18cf4b3d2cc18d7feaf157f418da4a64826bfed4692d53a12b81'
+            'f072d1f99b66095d7e6b2719f333b75e0c3cb9fc98a0334dafee32e522a447f8'
+            '765359bddd40ca41b46eef0a54b57853f74efbcd4dd7216af741668c26bd814e'
+            'b17747590458e5e540fad94dc046348f32b4e84565078c5609a824784163f6d2'
+            'fde7844e13e00125ad13bd87e0bc3f2347ce7424c054b1e2ade44ea05e1176fd'
+            '48ee59b2d3d2c6839825177a31f7efa6b4f4c7d43139409d63676c7955affb0b'
+            '6856ba88cb90e2f0133c81e26214bd4c4a0c1990a12ebbd34b4cda088be4cf8d'
+            '400935dff56e2f8e00fad3e24025f08924722f2fbe023d75d755bc19ca4e4fbd'
+            '2a978ea589fa3647d6156bdd054c5c76828b8934c832423f9d3a3db9e5e5019a'
+            '9db7f67e68218e51ee549cba0949aae86b6c14a48ac40b851cf76aba951f70a7'
+            '825f6500e22b3f8a9ecde110cb14c51a97399481b33123981d1f950dccc268a3'
+            'd685385b3a92fbac8f0c63175ae0a0f97b724c5a774f0452c884693902f5e1bf')
+
+package_base-system(){
+    install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/system
+}
+
+package_theia-system(){
+    depends=('base-system')
+    install -Dm0644 theia-capslock.hwdb "$pkgdir"/etc/udev/hwdb.d/61-theia-capslock.hwdb
+}
+
+package_foxboron-timers(){
+    install -Dm0644 timers-timer@.target "$pkgdir"/usr/lib/systemd/system/timer@.target
+    install -Dm0644 timers-timer@.timer "$pkgdir"/usr/lib/systemd/system/timer@.timer
+}
+
+package_foxboron-backup(){
+    # This really needs to be factored so we dont rely on bad dotfiles
+    depends=('foxboron-timers' 'snapper')
+    install -Dm0644 backup-backup@.service "$pkgdir"/usr/lib/systemd/system/backup@.service
+    install -Dm0644 backup-snapper-backup.service "$pkgdir"/usr/lib/systemd/system/snapper-backup.service
+    install -dm0750 "$pkgdir"/etc/sudoers.d
+    install -Dm0644 backup-sudoers "$pkgdir"/etc/sudoers.d/backup
+    install -Dm0755 backup-backup "$pkgdir"/usr/bin/backup
+    install -Dm0755 backup-snap-boot-backup "$pkgdir"/usr/bin/snap-boot-back
+    install -Dm0644 backup-50_bootbackup.hook "$pkgdir"/usr/share/libalpm/hooks/50_bootbackup.hook
+    install -Dm0644 backup-zz_bootback.hook "$pkgdir"/usr/share/libalpm/hooks/zz_bootback.hook
+    install -Dm0644 backup-snap-boot-config "$pkgdir"/usr/share/$pkgname/snap-boot.config
+}
+
+package_foxboron-fontconfig(){
+    depends=('ttf-hack' 'noto-fonts-emoji')
+    install -Dm0644 fontconfig-local.conf "$pkgdir"/etc/fonts/local.conf
+}

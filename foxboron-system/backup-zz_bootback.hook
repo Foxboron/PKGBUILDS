@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Upgrade
+Operation = Install
+Operation = Remove
+Type = Package
+Target = linux
+
+[Action]
+Description = Backing up post boot...
+When = PostTransaction
+Exec = /usr/bin/snap-boot-backup post

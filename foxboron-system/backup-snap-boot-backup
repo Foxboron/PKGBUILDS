@@ -1,0 +1,29 @@
+#!/usr/bin/bash
+set -e
+
+TRANSACTION=$1
+SNAPPER=$(snapper -c root list | grep $TRANSACTION | tail -n 1)
+SNAPPER_ID=$(echo $SNAPPER | awk -F\| '{print $2}' | tr -d ' ')
+DATE=$(echo $SNAPPER | awk -F\| '{print $4}')
+
+BACKUP_PATH="/boot/snap-boot/$SNAPPER_ID"
+
+# echo $SNAPPER
+# echo $SNAPPER_ID
+# echo $DATE
+
+mkdir -p $BACKUP_PATH
+
+cp /boot/vmlinuz-linux /boot/snap-boot/$SNAPPER_ID/vmlinuz-linux
+cp /boot/initramfs-linux.img /boot/snap-boot/$SNAPPER_ID/initramfs-linux.img
+
+set -o allexport
+source /etc/snap-boot.config
+set +o allexport
+
+cat >/boot/loader/entries/arch-$SNAPPER_ID.conf <<EOL
+title	$TRANSACTION - $SNAPPER_ID - $DATE
+linux	/snap-boot/$SNAPPER_ID/vmlinuz-linux
+initrd	/snap-boot/$SNAPPER_ID/initramfs-linux.img
+options	$PRE_OPTIONS rootflags=subvol=__snapshot/root/$SNAPPER_ID/snapshot $POST_OPTIONS 
+EOL

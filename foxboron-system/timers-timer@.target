@@ -1,0 +1,3 @@
+[Unit]
+Description=%i timer
+StopWhenUnneeded=true

@@ -1,0 +1,50 @@
+#!/bin/bash
+
+set -e
+
+if [[ $# -eq 0 ]] ; then
+    echo 'No snapper config supplied'
+    exit 0
+fi
+
+readonly SNAPPER_CONFIG=$1
+
+if [ ! -f /etc/snapper/configs/$SNAPPER_CONFIG ]; then
+    echo 'No snapper config with this name'
+    exit 0
+fi
+
+source /etc/snapper/configs/$SNAPPER_CONFIG
+
+export BORG_PASSPHRASE=`pass backup/$(hostname)`
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+export BORG_RSH="ssh -i /home/fox/.ssh/machine"
+
+LATEST_SNAPSHOT=$(snapper list | grep timeline | tail -n1 | awk -F\| '{print $2}' | tr -d ' ')
+BORG_LIST=$(borg list borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG | tail -n 1 | awk '{print $3}')
+
+if [[ $(date "+%Y%m%d") -gt ${BORG_LIST//-} ]];
+then
+    notify-send "Started $SNAPPER_CONFIG backup"
+    sudo -E borg create -v -p --stats -C lz4 \
+        -e "*/proc" \
+        -e "*/sys" \
+        -e "*/dev" \
+        -e "*/run" \
+        -e "*/tmp" \
+        -e "*/var/cache" \
+        -e "*/.cache" \
+        -e "*/Downloads" \
+        -e "*/var/lib/archbuild" \
+        -e "*/var/lib/build" \
+    borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG::$(date "+%Y%m%d-%H%M%S") "${SUBVOLUME%/}/.snapshots/$LATEST_SNAPSHOT"
+    if [ $? -eq 0 ]; then
+        notify-send "$SNAPPER_CONFIG backup done"
+    else
+        notify-send -u critical "Backup $SNAPPER_CONFIG failed!"
+    fi
+    borg prune -v borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG \
+        --keep-daily=$TIMELINE_LIMIT_DAILY \
+        --keep-weekly=$TIMELINE_LIMIT_WEEKLY \
+        --keep-monthly=$TIMELINE_LIMIT_YEARLY
+fi

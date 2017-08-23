@@ -1,0 +1,1 @@
+fox ALL=NOPASSWD:SETENV: /usr/bin/backup

@@ -1,0 +1,11 @@
+[Unit]
+Description=Borg backup BTRFS - %i
+After=snapper-backup.service
+
+[Service]
+Type=simple
+User=fox
+ExecStart=/usr/bin/backup %i
+
+[Install]
+WantedBy=timer@hourly.target
