@@ -1,7 +1,7 @@
 # Maintainer: Morten Linderud <morten@linderud.pw>  
 pkgname="molecule"
 pkgver=2.0.0.rc12
-pkgrel=4
+pkgrel=5
 pkgdesc='Molecule aids in the development and testing of Ansible roles.'
 url='https://github.com/metacloud/molecule/tree/2.0.0.rc12'
 arch=('any')
@@ -26,6 +26,7 @@ build() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   python setup.py install --root="${pkgdir}" --optimize=1 --skip-build
+  install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 }
 
 # vim:set ft=sh ts=2 sw=2 et:
