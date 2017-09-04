@@ -19,6 +19,7 @@ source=('timers-timer@.timer'
         'backup-50_bootbackup.hook'
         'backup-zz_bootback.hook'
         'backup-snap-boot-config'
+        'backup-backup-snapper-cleanup.service'
         'system-sudoers'
         'theia-capslock.hwdb'
         'fontconfig-local.conf')
@@ -34,6 +35,7 @@ sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '6856ba88cb90e2f0133c81e26214bd4c4a0c1990a12ebbd34b4cda088be4cf8d'
             '400935dff56e2f8e00fad3e24025f08924722f2fbe023d75d755bc19ca4e4fbd'
             '2a978ea589fa3647d6156bdd054c5c76828b8934c832423f9d3a3db9e5e5019a'
+            '34b2b90b07948c40b2165b8acb855f4ad99bb676bbc12100d8d31ee97829151d'
             '9db7f67e68218e51ee549cba0949aae86b6c14a48ac40b851cf76aba951f70a7'
             '825f6500e22b3f8a9ecde110cb14c51a97399481b33123981d1f950dccc268a3'
             'd685385b3a92fbac8f0c63175ae0a0f97b724c5a774f0452c884693902f5e1bf')
@@ -57,7 +59,6 @@ package_foxboron-backup(){
     depends=('foxboron-timers' 'snapper')
     install -Dm0644 backup-backup@.service "$pkgdir"/usr/lib/systemd/system/backup@.service
     install -Dm0644 backup-snapper-backup.service "$pkgdir"/usr/lib/systemd/system/snapper-backup.service
-    install -dm0750 "$pkgdir"/etc/sudoers.d
     install -Dm0644 backup-sudoers "$pkgdir"/etc/sudoers.d/backup
     install -Dm0755 backup-backup "$pkgdir"/usr/bin/backup
     install -Dm0755 backup-snap-boot-backup "$pkgdir"/usr/bin/snap-boot-back
