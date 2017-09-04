@@ -8,13 +8,12 @@ arch=('i686' 'x86_64')
 url="http://gephi.org"
 license=('CDDL' 'GPL3')
 depends=('java-runtime' 'libxxf86vm' 'java-environment')
-makedepends=()
 options=(!strip)
-source=("https://github.com/gephi/gephi/releases/download/v$pkgver/gephi-$pkgver-linux.tar.gz")
+source=("https://github.com/gephi/gephi/releases/download/v${pkgver}/gephi-${pkgver}-linux.tar.gz")
 sha256sums=('f1d54157302df05a53b94e1518880c949c43ba4ab21e52d57f3edcbdaa06c7ee')
 
 package() {
-  cd "$srcdir/gephi-${pkgver}"
+  cd "${srcdir}/gephi-${pkgver}"
   install -d "${pkgdir}/usr/share/java/${pkgname}"
   cp -r * "${pkgdir}/usr/share/java/${pkgname}"
   install -d "${pkgdir}/usr/bin"
