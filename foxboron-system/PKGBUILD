@@ -1,9 +1,16 @@
 # Maintainer: Morten Linderud <morten@linderud.pw>
 
 pkgbase=foxboron-system
-pkgname=(base-system theia-system foxboron-timers foxboron-backup foxboron-fontconfig)
+pkgname=('base-system'
+         'theia-system'
+         'foxboron-timers'
+         'foxboron-backup'
+         'foxboron-fontconfig'
+         'foxboron-acpid'
+         'foxboron-x11'
+         )
 pkgver=1
-pkgrel=1
+pkgrel=2
 pkgdesc="System configs"
 arch=("any")
 url="https://velox.pw/"
@@ -22,7 +29,13 @@ source=('timers-timer@.timer'
         'backup-backup-snapper-cleanup.service'
         'system-sudoers'
         'theia-capslock.hwdb'
-        'fontconfig-local.conf')
+        'fontconfig-local.conf'
+        'acpid-thinkpad-dock-lenovo'
+        'acpid-thinkpad-undock-lenovo'
+        'acpid-thinkpad-dock.sh'
+        'acpid-thinkpad-undock.sh'
+        'x11-99-keyboard.conf'
+        )
 
 sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '148cffd0796d1fa2b1d9bba9274493bd9cfc2d5a524ffc0e03fc2d6e8e2c53fb'
@@ -35,12 +48,18 @@ sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '6856ba88cb90e2f0133c81e26214bd4c4a0c1990a12ebbd34b4cda088be4cf8d'
             '400935dff56e2f8e00fad3e24025f08924722f2fbe023d75d755bc19ca4e4fbd'
             '2a978ea589fa3647d6156bdd054c5c76828b8934c832423f9d3a3db9e5e5019a'
-            '34b2b90b07948c40b2165b8acb855f4ad99bb676bbc12100d8d31ee97829151d'
+            '08e1d51e9559f89f8d6a57a3134b05295d8ace56cddac3aa97a0f3792b68ee91'
             '9db7f67e68218e51ee549cba0949aae86b6c14a48ac40b851cf76aba951f70a7'
             '825f6500e22b3f8a9ecde110cb14c51a97399481b33123981d1f950dccc268a3'
-            'd685385b3a92fbac8f0c63175ae0a0f97b724c5a774f0452c884693902f5e1bf')
+            'd685385b3a92fbac8f0c63175ae0a0f97b724c5a774f0452c884693902f5e1bf'
+            '16f2124165aaeea64670460718b1f0e826483d4e8b4f2aceb09ab145db3b542d'
+            'fe14f948f05526499db04831cd01c12f80ffac33176142d5bc9b39f3fecedf33'
+            'fe508fb33786cda8f858f5a1e804b4f8cea13b523e99e857dcf66b49ad7d1965'
+            '64d013589348bb5ca5767284b179188bc6f4761b3846590a10e9c3b809672480'
+            '477185de77c1cff69e9b7c9e5451fc71294c00c407726f87e29324f34379c01f')
 
 package_base-system(){
+    depends=('wireguard')
     install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/system
 }
 
@@ -70,4 +89,15 @@ package_foxboron-backup(){
 package_foxboron-fontconfig(){
     depends=('ttf-hack' 'noto-fonts-emoji')
     install -Dm0644 fontconfig-local.conf "$pkgdir"/etc/fonts/local.conf
+}
+package_foxboron-acpid(){
+    depends=('acpid') 
+    install -Dm0644 acpid-thinkpad-dock-lenovo "$pkgdir"/etc/acpi/events/thinkpad-dock-lenovo
+    install -Dm0644 acpid-thinkpad-undock-lenovo "$pkgdir"/etc/acpi/events/thinkpad-undock-lenovo
+    install -Dm0755 acpid-thinkpad-undock.sh "$pkgdir"/etc/acpi/thinkpad-undock.sh
+    install -Dm0755 acpid-thinkpad-dock.sh "$pkgdir"/etc/acpi/thinkpad-dock.sh
+}
+
+package_foxboron-x11(){
+    install -Dm0644 ./x11-99-keyboard.conf "$pkgdir"/etc/X11/xorg.conf.d/99-keyboard.conf
 }
