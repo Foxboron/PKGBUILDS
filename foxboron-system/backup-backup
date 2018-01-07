@@ -20,13 +20,21 @@ export BORG_PASSPHRASE=`pass backup/$(hostname)`
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
 export BORG_RSH="ssh -i /home/fox/.ssh/machine"
 
-LATEST_SNAPSHOT=$(snapper list | grep timeline | tail -n1 | awk -F\| '{print $2}' | tr -d ' ')
+LATEST_SNAPSHOT=$(snapper -c $SNAPPER_CONFIG list | grep timeline | tail -n1 | awk -F\| '{print $2}' | tr -d ' ')
 BORG_LIST=$(borg list borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG | tail -n 1 | awk '{print $3}')
+
+if [[ $BORG_LIST = "" ]];
+then
+    expect -c "
+    spawn borg init --encryption=repokey-blake2 borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG
+    expect -nocase \"passphrase\" {send \"$BORG_PASSPHRASE\r\"; interact}
+    "
+fi
 
 if [[ $(date "+%Y%m%d") -gt ${BORG_LIST//-} ]];
 then
     notify-send "Started $SNAPPER_CONFIG backup"
-    sudo -E borg create -v -p --stats -C lz4 \
+    borg create -v -p --stats -C lz4 \
         -e "*/proc" \
         -e "*/sys" \
         -e "*/dev" \
@@ -34,6 +42,8 @@ then
         -e "*/tmp" \
         -e "*/var/cache" \
         -e "*/.cache" \
+        -e "*/Media" \
+        -e "*/Bilder" \
         -e "*/Downloads" \
         -e "*/var/lib/archbuild" \
         -e "*/var/lib/build" \

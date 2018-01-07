@@ -41,8 +41,8 @@ source=('timers-timer@.timer'
 
 sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '148cffd0796d1fa2b1d9bba9274493bd9cfc2d5a524ffc0e03fc2d6e8e2c53fb'
-            '19d6e6a51c1d18cf4b3d2cc18d7feaf157f418da4a64826bfed4692d53a12b81'
-            'f072d1f99b66095d7e6b2719f333b75e0c3cb9fc98a0334dafee32e522a447f8'
+            'ea8a94a7e1397906bb6d6becd12c0fb71d6ed5928e4cccf3f760a7a60ab241fb'
+            '21749c95b5cf0a31401035e4b677fc3758208f97445323d31befb67f6cd16602'
             '765359bddd40ca41b46eef0a54b57853f74efbcd4dd7216af741668c26bd814e'
             'b17747590458e5e540fad94dc046348f32b4e84565078c5609a824784163f6d2'
             'fde7844e13e00125ad13bd87e0bc3f2347ce7424c054b1e2ade44ea05e1176fd'
@@ -70,7 +70,8 @@ package_foxboron-packages(){
     'alsa-utils', 'mosh', 'ssh', 'qutebrowser', 'chromium', 'task',
     'mutt', 'xf86-video-intel' , 'gtk2', 'redshift', 'zathura',
     'zathura-pdf-mupdf', 'i3lock', 'imv', 'playerctl', 'task',
-    'urlwatch', 'python-beautifulsoup4' 'xorg-xset')
+    'urlwatch', 'python-beautifulsoup4' 'xorg-xset' 'dunst' 'mpv'
+    'expac')
 }
 
 package_base-system(){
@@ -94,15 +95,11 @@ package_foxboron-timers(){
 
 package_foxboron-backup(){
     # This really needs to be factored so we dont rely on bad dotfiles
-    depends=('foxboron-timers' 'snapper')
+    depends=('foxboron-timers' 'snapper' 'expac')
     install -Dm0644 backup-backup@.service "$pkgdir"/usr/lib/systemd/system/backup@.service
     install -Dm0644 backup-snapper-backup.service "$pkgdir"/usr/lib/systemd/system/snapper-backup.service
     install -Dm0644 backup-sudoers "$pkgdir"/etc/sudoers.d/backup
     install -Dm0755 backup-backup "$pkgdir"/usr/bin/backup
-    install -Dm0755 backup-snap-boot-backup "$pkgdir"/usr/bin/snap-boot-back
-    install -Dm0644 backup-50_bootbackup.hook "$pkgdir"/usr/share/libalpm/hooks/50_bootbackup.hook
-    install -Dm0644 backup-zz_bootback.hook "$pkgdir"/usr/share/libalpm/hooks/zz_bootback.hook
-    install -Dm0644 backup-snap-boot-config "$pkgdir"/usr/share/$pkgname/snap-boot.config
 }
 
 package_foxboron-pacman-backup(){
