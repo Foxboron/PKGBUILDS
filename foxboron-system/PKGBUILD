@@ -30,6 +30,8 @@ source=('timers-timer@.timer'
         'backup-backup-snapper-cleanup.service'
         'system-sudoers'
         'theia-capslock.hwdb'
+        'theia-thinkfan.conf'
+        'theia-thinkpad_acpi.conf'
         'fontconfig-local.conf'
         'acpid-thinkpad-dock-lenovo'
         'acpid-thinkpad-undock-lenovo'
@@ -75,7 +77,7 @@ package_foxboron-packages(){
 }
 
 package_base-system(){
-    depends=('sudo', 'zsh' 'vim')
+    # depends=('sudo', 'zsh' 'vim')
 
     # aur
     # i3-gaps
@@ -85,10 +87,14 @@ package_base-system(){
 
 package_theia-system(){
     depends=('base-system')
+    # Fix thinkfan
     install -Dm0644 theia-capslock.hwdb "$pkgdir"/etc/udev/hwdb.d/61-theia-capslock.hwdb
+    install -Dm0644 theia-thinkfan.conf "$pkgdir"/etc/thinkfan.conf
+    install -Dm0644 theia-thinkpad_acpi.conf "$pkgdir"/etc/modprobe.d/thinkpad_acpi.conf
 }
 
 package_foxboron-timers(){
+    install=timers.install
     install -Dm0644 timers-timer@.target "$pkgdir"/usr/lib/systemd/system/timer@.target
     install -Dm0644 timers-timer@.timer "$pkgdir"/usr/lib/systemd/system/timer@.timer
 }
@@ -127,8 +133,6 @@ package_foxboron-x11(){
     install -Dm0644 x11-99-keyboard.conf "$pkgdir"/etc/X11/xorg.conf.d/99-keyboard.conf
 }
 
-#package_foxboron-pacman(){
-#}
 package_foxboron-bfq(){
     install -Dm0644 bfq-60-scheduler.rules "$pkgdir"/etc/udev/rules.d/60-scheduler.rules
 }

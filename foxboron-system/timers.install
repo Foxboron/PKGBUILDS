@@ -1,0 +1,13 @@
+post_install () {
+    systemctl enable --now timer@minutely
+    systemctl enable --now timer@hourly
+    systemctl enable --now timer@daily
+    systemctl enable --now timer@mothly
+}
+
+pre_remove(){
+    systemctl disable timer@minutely
+    systemctl disable timer@hourly
+    systemctl disable timer@daily
+    systemctl disable timer@mothly
+}
