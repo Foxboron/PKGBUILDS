@@ -3,4 +3,6 @@
 !*.install
 !*.SRCINFO
 !*PKGBUILD
+!*tmpfiles
+!*sysusers
 
