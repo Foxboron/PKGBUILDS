@@ -1,0 +1,20 @@
+pkgbase = jotta-cli
+	pkgdesc = Jottacloud command line client to back up/share your files to/on Jottacloud.
+	pkgver = 0.4.4914
+	pkgrel = 3
+	url = http://docs.jottacloud.com/jottacloud-command-line-tool
+	arch = x86_64
+	arch = i686
+	license = custom: (C) Jotta AS 2018
+	depends = systemd
+	depends = glibc
+	provides = jotta-cli
+	options = !strip
+	options = !upx
+	source_x86_64 = https://repo.jotta.us/debian/pool/main/j/jotta-cli/jotta-cli_0.4.4914_amd64.deb
+	sha256sums_x86_64 = 3882cea8ba0af218e4fc959effa02bf8eb58e9c88ceadd2f4a2aca549a82b6bb
+	source_i686 = https://repo.jotta.us/debian/pool/main/j/jotta-cli/jotta-cli_0.4.4914_i386.deb
+	sha256sums_i686 = 4ca3271901c734c9994e7726b81aa11a03ceabcb1e92b534ac20429974ba6d92
+
+pkgname = jotta-cli
+
