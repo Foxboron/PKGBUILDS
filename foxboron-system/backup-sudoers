@@ -1,3 +1,4 @@
 fox ALL=NOPASSWD:SETENV: /usr/bin/backup
 fox ALL=NOPASSWD:SETENV: /usr/bin/borg
 fox ALL=NOPASSWD: /usr/bin/snapper
+fox ALL=NOPASSWD: /usr/bin/backup-sudo

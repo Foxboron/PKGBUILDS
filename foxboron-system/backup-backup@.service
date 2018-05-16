@@ -1,6 +1,6 @@
 [Unit]
 Description=Borg backup BTRFS - %i
-After=snapper-backup.service
+After=snapper-backup.service snapper-cleanup.service
 
 [Service]
 Type=simple

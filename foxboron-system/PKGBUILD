@@ -19,6 +19,7 @@ license=('MIT')
 source=('timers-timer@.timer'
         'timers-timer@.target'
         'backup-backup'
+        'backup-backup-sudo'
         'backup-sudoers'
         'backup-backup@.service'
         'backup-snapper-filter'
@@ -43,9 +44,10 @@ source=('timers-timer@.timer'
 
 sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '148cffd0796d1fa2b1d9bba9274493bd9cfc2d5a524ffc0e03fc2d6e8e2c53fb'
-            'ea8a94a7e1397906bb6d6becd12c0fb71d6ed5928e4cccf3f760a7a60ab241fb'
-            '21749c95b5cf0a31401035e4b677fc3758208f97445323d31befb67f6cd16602'
-            '765359bddd40ca41b46eef0a54b57853f74efbcd4dd7216af741668c26bd814e'
+            '88f44eecb9c538889f4eacf439cfd605a5a58841bf1c55e26693354cb02313a7'
+            'f5252e9184f5469bb7d4091359f752674b5925efe670a19aa65177b7409713b5'
+            '9eae320f6f0842d0692d46020125432350ed25fbddec2d9829d16ca7f43991c5'
+            'a0b5613069aaf7929e6d83308536495066bcda68e9c3e4e7a923c10a5a1eaa86'
             'b17747590458e5e540fad94dc046348f32b4e84565078c5609a824784163f6d2'
             'fde7844e13e00125ad13bd87e0bc3f2347ce7424c054b1e2ade44ea05e1176fd'
             '48ee59b2d3d2c6839825177a31f7efa6b4f4c7d43139409d63676c7955affb0b'
@@ -84,6 +86,7 @@ package_base-system(){
     # aur
     # i3-gaps
     # ttf-icons
+    install -d 0750 "$pkgdir"/etc/sudoers.d/system
     install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/system
 }
 
@@ -106,8 +109,10 @@ package_foxboron-backup(){
     depends=('foxboron-timers' 'snapper' 'expac')
     install -Dm0644 backup-backup@.service "$pkgdir"/usr/lib/systemd/system/backup@.service
     install -Dm0644 backup-snapper-backup.service "$pkgdir"/usr/lib/systemd/system/snapper-backup.service
+    install -d 0750 "$pkgdir"/etc/sudoers.d
     install -Dm0644 backup-sudoers "$pkgdir"/etc/sudoers.d/backup
     install -Dm0755 backup-backup "$pkgdir"/usr/bin/backup
+    install -Dm0755 backup-backup-sudo "$pkgdir"/usr/bin/backup-sudo
 }
 
 package_foxboron-pacman-backup(){
