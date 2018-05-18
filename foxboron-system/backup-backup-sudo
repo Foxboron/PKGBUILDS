@@ -1,0 +1,26 @@
+#!/bin/bash -e
+
+validate_path() {
+    # validate path
+    targetpath=$(realpath -m -- "$1")
+    if [[ "$targetpath" != */.snapshots/* ]]; then
+        echo "Invalid path given." >&2
+        exit 2
+    fi
+}
+
+case "$1" in
+    mount)
+        validate_path "$2"
+        mkdir -p "$3"
+        mount --bind -- "$2" "$3"
+        ;;
+    cleanup)
+        umount "$2" 2> /dev/null || true
+        rm -rf "$2"
+        ;;
+    *)
+        echo "No command specified." >&2
+        exit 1
+        ;;
+esac

@@ -1,8 +1,13 @@
 [Unit]
 Description=Borg backup BTRFS - %i
-After=snapper-backup.service snapper-cleanup.service
+Wants=network-online.target
+After=network-online.target snapper-backup.service snapper-cleanup.service
+
 
 [Service]
+Nice=19
+IOSchedulingClass=3
+IOSchedulingPriority=7
 Type=simple
 User=fox
 ExecStart=/usr/bin/backup %i
