@@ -10,8 +10,8 @@ pkgname=('base-system'
          'foxboron-x11'
          'foxboron-bfq'
          )
-pkgver=1
-pkgrel=2
+pkgver=2
+pkgrel=1
 pkgdesc="System configs"
 arch=("any")
 url="https://velox.pw/"
@@ -86,7 +86,7 @@ package_base-system(){
     # aur
     # i3-gaps
     # ttf-icons
-    install -d 0750 "$pkgdir"/etc/sudoers.d
+    install -dm0750 "$pkgdir"/etc/sudoers.d
     install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/10-system
 }
 
@@ -109,7 +109,7 @@ package_foxboron-backup(){
     depends=('foxboron-timers' 'snapper' 'expac')
     install -Dm0644 backup-backup@.service "$pkgdir"/usr/lib/systemd/system/backup@.service
     install -Dm0644 backup-snapper-backup.service "$pkgdir"/usr/lib/systemd/system/snapper-backup.service
-    install -d 0750 "$pkgdir"/etc/sudoers.d
+    install -dm0750 "$pkgdir"/etc/sudoers.d
     install -Dm0644 backup-sudoers "$pkgdir"/etc/sudoers.d/20-backup
     install -Dm0755 backup-backup "$pkgdir"/usr/bin/backup
     install -Dm0755 backup-backup-sudo "$pkgdir"/usr/bin/backup-sudo

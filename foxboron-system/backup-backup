@@ -32,18 +32,20 @@ source /etc/snapper/configs/$SNAPPER_CONFIG
 export BORG_PASSPHRASE="$(pass backup/$(hostname))"
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
 export BORG_RSH="ssh -i /home/fox/.ssh/machine"
+readonly DATE_FORMAT="+%Y%m%d-%H%M%S"
 
-LATEST_SNAPSHOT="$(snapper -c $SNAPPER_CONFIG list | grep timeline | tail -n1 | awk -F\| '{print $2}' | tr -d ' ')"
+LAST_SNAPSHOT="$(snapper -c home list | grep timeline | tail -n1)"
+LATEST_SNAPSHOT_ID="$(echo $LAST_SNAPSHOT | awk -F\| '{print $2}' | tr -d ' ')"
+LATEST_DATE=$(echo $LAST_SNAPSHOT | awk -F\| '{print $4}' | xargs -0 date "+%s" -d)
 
-if ! BORG_LIST="$(borg list borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG | tail -n 1 | awk '{print $3}')"; then
+if ! BORG_LIST=$(borg list borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG | tail -n 1 | awk '{print $3 " " $4}' | xargs -0 date "+%s" -d); then
     borg init --umask 0027 --encryption=repokey-blake2 borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG
 fi
 
-
-if [[ $(date "+%Y%m%d") -gt ${BORG_LIST//-} ]];
+if [ $LATEST_DATE -gt ${BORG_LIST//-} ];
 then
     notify-send "Started $SNAPPER_CONFIG backup"
-    sudo backup-sudo mount "${SUBVOLUME%/}/.snapshots/$LATEST_SNAPSHOT" "${SUBVOLUME%/}/.snapshots/backup"
+    sudo backup-sudo mount "${SUBVOLUME%/}/.snapshots/$LATEST_SNAPSHOT_ID" "${SUBVOLUME%/}/.snapshots/backup"
     cleanup() {
         sudo backup-sudo cleanup "${SUBVOLUME%/}/.snapshots/backup"
     }
@@ -65,7 +67,7 @@ then
         -e "*/.config/borg/security" \
         -e "*/.snapshots/backup/snapshot/.snapshots" \
         -e "*/.snapshots/backup/info.xml" \
-    borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG::$(date "+%Y%m%d-%H%M%S") "${SUBVOLUME%/}/.snapshots/backup"; then
+    borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG::$(date $DATE_FORMAT) "${SUBVOLUME%/}/.snapshots/backup"; then
         notify-send -u critical "Backup $SNAPPER_CONFIG failed!"
     fi
     notify-send "$SNAPPER_CONFIG backup done"
