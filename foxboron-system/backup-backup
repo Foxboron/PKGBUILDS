@@ -15,6 +15,11 @@ if [ ! -f /etc/snapper/configs/$SNAPPER_CONFIG ]; then
     exit 0
 fi
 
+ notify_err() {
+     notify-send -u critical "Backup $SNAPPER_CONFIG failed!"
+ }
+trap 'notify_err' ERR
+
 NETWORK_TIMEOUT=120
 i=0
 while [ "$(nmcli -g connectivity general status)" = "none" ]; do
@@ -29,10 +34,14 @@ done
 
 source /etc/snapper/configs/$SNAPPER_CONFIG
 
-export BORG_PASSPHRASE="$(pass backup/$(hostname))"
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-export BORG_RSH="ssh -i /home/fox/.ssh/machine"
 readonly DATE_FORMAT="+%Y%m%d-%H%M%S"
+export GNUPGHOME="/home/fox/.config/gnupg"
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+
+BORG_PASSPHRASE="$(pass backup/$(hostname))"
+export BORG_PASSPHRASE
+BORG_RSH="ssh -i /home/fox/.ssh/machine"
+export BORG_RSH
 
 LAST_SNAPSHOT="$(snapper -c home list | grep timeline | tail -n1)"
 LATEST_SNAPSHOT_ID="$(echo $LAST_SNAPSHOT | awk -F\| '{print $2}' | tr -d ' ')"
@@ -44,7 +53,7 @@ fi
 
 if [ $LATEST_DATE -gt ${BORG_LIST//-} ];
 then
-    notify-send "Started $SNAPPER_CONFIG backup"
+    # notify-send "Started $SNAPPER_CONFIG backup"
     sudo backup-sudo mount "${SUBVOLUME%/}/.snapshots/$LATEST_SNAPSHOT_ID" "${SUBVOLUME%/}/.snapshots/backup"
     cleanup() {
         sudo backup-sudo cleanup "${SUBVOLUME%/}/.snapshots/backup"
@@ -70,11 +79,12 @@ then
     borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG::$(date $DATE_FORMAT) "${SUBVOLUME%/}/.snapshots/backup"; then
         notify-send -u critical "Backup $SNAPPER_CONFIG failed!"
     fi
-    notify-send "$SNAPPER_CONFIG backup done"
+    # notify-send "$SNAPPER_CONFIG backup done"
     borg prune --umask 0027 -v borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG \
-        --keep-daily="$TIMELINE_LIMIT_DAILY" \
-        --keep-weekly="$TIMELINE_LIMIT_WEEKLY" \
-        --keep-monthly="$TIMELINE_LIMIT_YEARLY"
+           --keep-hourly 24 \
+           --keep-daily   7 \
+           --keep-weekly  4 \
+           --keep-monthly 6
 else
     echo "Allready have a backup with the given date"
 fi

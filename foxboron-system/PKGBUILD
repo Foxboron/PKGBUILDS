@@ -5,10 +5,6 @@ pkgname=('base-system'
          'theia-system'
          'foxboron-timers'
          'foxboron-backup'
-         'foxboron-fontconfig'
-         'foxboron-acpid'
-         'foxboron-x11'
-         'foxboron-bfq'
          )
 pkgver=2
 pkgrel=1
@@ -30,6 +26,7 @@ source=('timers-timer@.timer'
         'backup-snap-boot-config'
         'backup-backup-snapper-cleanup.service'
         'system-sudoers'
+        'pacreport.conf'
         'theia-capslock.hwdb'
         'theia-thinkfan.conf'
         'theia-thinkpad_acpi.conf'
@@ -39,12 +36,13 @@ source=('timers-timer@.timer'
         'acpid-thinkpad-dock.sh'
         'acpid-thinkpad-undock.sh'
         'x11-99-keyboard.conf'
+        'x11-99-touchpad-disable.conf'
         'bfq-60-scheduler.rules'
         )
 
 sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '148cffd0796d1fa2b1d9bba9274493bd9cfc2d5a524ffc0e03fc2d6e8e2c53fb'
-            '88f44eecb9c538889f4eacf439cfd605a5a58841bf1c55e26693354cb02313a7'
+            '38e46a62914350ec5becb14a80a1139d140a9b92082ad9cd4394705856d18f99'
             'f5252e9184f5469bb7d4091359f752674b5925efe670a19aa65177b7409713b5'
             '9eae320f6f0842d0692d46020125432350ed25fbddec2d9829d16ca7f43991c5'
             'fba676be6530edb1f4db5bc4bf7ea9ddcd8209822b797bd0f45e7fce5bbb940c'
@@ -55,7 +53,8 @@ sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '400935dff56e2f8e00fad3e24025f08924722f2fbe023d75d755bc19ca4e4fbd'
             '2a978ea589fa3647d6156bdd054c5c76828b8934c832423f9d3a3db9e5e5019a'
             '08e1d51e9559f89f8d6a57a3134b05295d8ace56cddac3aa97a0f3792b68ee91'
-            '9db7f67e68218e51ee549cba0949aae86b6c14a48ac40b851cf76aba951f70a7'
+            '053e38a80a8162450b9e145c119b9cee0385a869b26d24bb3f681bff78137592'
+            '29e2f1fa01e1b3cbcbe6b320a8e3329d2037d4fc2dd70632472d551a7e09a75a'
             '825f6500e22b3f8a9ecde110cb14c51a97399481b33123981d1f950dccc268a3'
             '2e15377025beca05b6a1f82bf7e17da3389bae718a5d720384b2ff72bbeb9ec2'
             '28874576641b3cc1aa486e1bc9ed40eadfe8b13d6d3014016e31fedc5dc5195f'
@@ -65,6 +64,7 @@ sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             'fe508fb33786cda8f858f5a1e804b4f8cea13b523e99e857dcf66b49ad7d1965'
             '64d013589348bb5ca5767284b179188bc6f4761b3846590a10e9c3b809672480'
             '477185de77c1cff69e9b7c9e5451fc71294c00c407726f87e29324f34379c01f'
+            'a351326781889d172747b1f71bb5de968054daafc8b562920e15a576a85418dc'
             '24f196f2369798d8c495d1b811aa13885eef28dc0c7be614d2ac2ee679f4f4f7')
 
 package_foxboron-packages(){
@@ -81,21 +81,28 @@ package_foxboron-packages(){
 }
 
 package_base-system(){
+    depends=('ttf-hack' 'noto-fonts-emoji')
     # depends=('sudo', 'zsh' 'vim')
 
-    # aur
-    # i3-gaps
-    # ttf-icons
     install -dm0750 "$pkgdir"/etc/sudoers.d
     install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/10-system
+    install -Dm0644 pacreport.conf "$pkgdir"/etc/pacreport.conf
+    install -Dm0644 bfq-60-scheduler.rules "$pkgdir"/etc/udev/rules.d/60-scheduler.rules
+    install -Dm0644 fontconfig-local.conf "$pkgdir"/etc/fonts/local.conf
 }
 
 package_theia-system(){
-    depends=('base-system')
-    # Fix thinkfan
+    depends=('base-system' 'acpid')
     install -Dm0644 theia-capslock.hwdb "$pkgdir"/etc/udev/hwdb.d/61-theia-capslock.hwdb
     install -Dm0644 theia-thinkfan.conf "$pkgdir"/etc/thinkfan.conf
     install -Dm0644 theia-thinkpad_acpi.conf "$pkgdir"/etc/modprobe.d/thinkpad_acpi.conf
+    install -Dm0644 acpid-thinkpad-dock-lenovo "$pkgdir"/etc/acpi/events/thinkpad-dock-lenovo
+    install -Dm0644 acpid-thinkpad-undock-lenovo "$pkgdir"/etc/acpi/events/thinkpad-undock-lenovo
+    install -Dm0755 acpid-thinkpad-undock.sh "$pkgdir"/etc/acpi/thinkpad-undock.sh
+    install -Dm0755 acpid-thinkpad-dock.sh "$pkgdir"/etc/acpi/thinkpad-dock.sh
+    install -Dm0644 x11-99-keyboard.conf "$pkgdir"/etc/X11/xorg.conf.d/99-keyboard.conf
+    install -Dm0644 x11-99-touchpad-disable.conf "$pkgdir"/etc/X11/xorg.conf.d/99-touchpad-disable.conf
+    printf 'theia\n' | install -Dm0644 /dev/stdin "$pkgdir"/etc/hostname
 }
 
 package_foxboron-timers(){
@@ -111,48 +118,17 @@ package_foxboron-backup(){
     install -Dm0644 backup-snapper-backup.service "$pkgdir"/usr/lib/systemd/system/snapper-backup.service
     install -dm0750 "$pkgdir"/etc/sudoers.d
     install -Dm0644 backup-sudoers "$pkgdir"/etc/sudoers.d/20-backup
-    install -Dm0755 backup-backup "$pkgdir"/usr/bin/backup
-    install -Dm0755 backup-backup-sudo "$pkgdir"/usr/bin/backup-sudo
+    install -Dm0755 backup-backup "$pkgdir"/usr/local/bin/backup
+    install -Dm0755 backup-backup-sudo "$pkgdir"/usr/local/bin/backup-sudo
 }
 
 package_foxboron-pacman-backup(){
     # This really needs to be factored so we dont rely on bad dotfiles
     depends=('foxboron-pacman-backup')
-    install -Dm0755 backup-snap-boot-backup "$pkgdir"/usr/bin/snap-boot-back
+    install -Dm0755 backup-snap-boot-backup "$pkgdir"/usr/local/bin/snap-boot-back
     install -Dm0644 backup-50_bootbackup.hook "$pkgdir"/usr/share/libalpm/hooks/50_bootbackup.hook
     install -Dm0644 backup-zz_bootback.hook "$pkgdir"/usr/share/libalpm/hooks/zz_bootback.hook
     install -Dm0644 backup-snap-boot-config "$pkgdir"/usr/share/$pkgname/snap-boot.config
 }
 
-package_foxboron-fontconfig(){
-    depends=('ttf-hack' 'noto-fonts-emoji')
-    install -Dm0644 fontconfig-local.conf "$pkgdir"/etc/fonts/local.conf
-}
-package_foxboron-acpid(){
-    depends=('acpid') 
-    install -Dm0644 acpid-thinkpad-dock-lenovo "$pkgdir"/etc/acpi/events/thinkpad-dock-lenovo
-    install -Dm0644 acpid-thinkpad-undock-lenovo "$pkgdir"/etc/acpi/events/thinkpad-undock-lenovo
-    install -Dm0755 acpid-thinkpad-undock.sh "$pkgdir"/etc/acpi/thinkpad-undock.sh
-    install -Dm0755 acpid-thinkpad-dock.sh "$pkgdir"/etc/acpi/thinkpad-dock.sh
-}
-
-package_foxboron-x11(){
-    install -Dm0644 x11-99-keyboard.conf "$pkgdir"/etc/X11/xorg.conf.d/99-keyboard.conf
-}
-
-package_foxboron-bfq(){
-    install -Dm0644 bfq-60-scheduler.rules "$pkgdir"/etc/udev/rules.d/60-scheduler.rules
-}
-
-package_foxboron-yubikey(){
-    depends=()
-    # pcsc-tools
-    # yubikey-manager
-    # udevrules
-}
-
-package_foxboron-wireguard(){
-    depends=('wireguard-dkms' 'wireguard-tools')
-}
-
-# Add tlp btrfs fix
+# Add tlp btrfs fix patch
