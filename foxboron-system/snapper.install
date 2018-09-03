@@ -1,0 +1,8 @@
+post_install () {
+    #systemctl enable --now snapper-backup.timer
+    systemctl enable --now snapper-cleanup.timer
+}
+
+pre_remove(){
+    systemctl disable snapper-cleanup.timer
+}

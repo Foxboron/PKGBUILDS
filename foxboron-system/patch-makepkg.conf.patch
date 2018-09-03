@@ -1,0 +1,20 @@
+--- /proc/self/fd/11	2018-09-04 00:42:33.671582043 +0200
++++ /etc/makepkg.conf	2018-08-12 22:54:15.000000000 +0200
+@@ -41,7 +41,7 @@
+ CXXFLAGS="-march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -fno-plt"
+ LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
+ #-- Make Flags: change this for DistCC/SMP systems
+-#MAKEFLAGS="-j2"
++MAKEFLAGS="-j8"
+ #-- Debugging flags
+ DEBUG_CFLAGS="-g -fvar-tracking-assignments"
+ DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"
+@@ -129,7 +129,7 @@
+ #
+ COMPRESSGZ=(gzip -c -f -n)
+ COMPRESSBZ2=(bzip2 -c -f)
+-COMPRESSXZ=(xz -c -z -)
++COMPRESSXZ=(xz -c -z -T 0 -)
+ COMPRESSLRZ=(lrzip -q)
+ COMPRESSLZO=(lzop -q)
+ COMPRESSZ=(compress -c -f)

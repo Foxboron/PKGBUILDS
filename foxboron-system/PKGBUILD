@@ -38,6 +38,11 @@ source=('timers-timer@.timer'
         'x11-99-keyboard.conf'
         'x11-99-touchpad-disable.conf'
         'bfq-60-scheduler.rules'
+        'hook-patch-system-configs.hook'
+        'hook-patch-system-configs.scripts'
+        'patch-makepkg.conf.patch'
+        'patch-pacman.conf.patch'
+        'pacman-aur.conf'
         )
 
 sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
@@ -65,7 +70,12 @@ sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '64d013589348bb5ca5767284b179188bc6f4761b3846590a10e9c3b809672480'
             '477185de77c1cff69e9b7c9e5451fc71294c00c407726f87e29324f34379c01f'
             'a351326781889d172747b1f71bb5de968054daafc8b562920e15a576a85418dc'
-            '24f196f2369798d8c495d1b811aa13885eef28dc0c7be614d2ac2ee679f4f4f7')
+            '24f196f2369798d8c495d1b811aa13885eef28dc0c7be614d2ac2ee679f4f4f7'
+            'e03ee1956c15ab4041dc5a29c978d0017ac5d8bce782f813b55bd0193fa7672e'
+            '9e17874e5db1bc22a2fdc5bbb1902069f545f82d926db0ab7df6c962925f3178'
+            'f46d3223001da2cea7cb9e495b0e44604a605c2883eed1753a6ee6c025c94d13'
+            '6f2e82b238d6c5699778b9726875ec61b2b5d44f80986e52bf6d99e13af66555'
+            '7c441eeccea11b5a5ed6c4a4311e33a18930437ba40414289e223612c1d328c9')
 
 package_foxboron-packages(){
     depend=('gvim', 'feh', 'ctags', 'feh', 'tlp', 'udiskie',
@@ -77,18 +87,22 @@ package_foxboron-packages(){
     'mutt', 'xf86-video-intel' , 'gtk2', 'redshift', 'zathura',
     'zathura-pdf-mupdf', 'i3lock', 'imv', 'playerctl', 'task',
     'urlwatch', 'python-beautifulsoup4' 'xorg-xset' 'dunst' 'mpv'
-    'expac')
+    'expac' 'acpi_call' 'xsel' 'exa' 'task')
 }
 
 package_base-system(){
     depends=('ttf-hack' 'noto-fonts-emoji')
-    # depends=('sudo', 'zsh' 'vim')
-
+    install=repo.install
     install -dm0750 "$pkgdir"/etc/sudoers.d
     install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/10-system
     install -Dm0644 pacreport.conf "$pkgdir"/etc/pacreport.conf
     install -Dm0644 bfq-60-scheduler.rules "$pkgdir"/etc/udev/rules.d/60-scheduler.rules
     install -Dm0644 fontconfig-local.conf "$pkgdir"/etc/fonts/local.conf
+    install -Dm0755 hook-patch-system-configs.hook "$pkgdir"/usr/share/libalpm/hooks/patch-system-configs.hook
+    install -Dm0755 hook-patch-system-configs.scripts "$pkgdir"/usr/share/libalpm/scripts/patch-system-configs
+    install -Dm0644 patch-pacman.conf.patch "$pkgdir"/usr/share/system-config/patches/pacman.conf.patch
+    install -Dm0644 patch-makepkg.conf.patch "$pkgdir"/usr/share/system-config/patches/makepkg.conf.patch
+    install -Dm0644 pacman-aur.conf "$pkgdir"/etc/pacman.d/aur
 }
 
 package_theia-system(){

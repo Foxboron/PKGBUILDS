@@ -1,0 +1,5 @@
+post_install () {
+    # We only have one user....
+    install -d /var/cache/pacman/aur -o 1000
+    repo-add /var/cache/pacman/aur/aur.db.tar
+}
