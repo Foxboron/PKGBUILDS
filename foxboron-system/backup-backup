@@ -38,7 +38,7 @@ readonly DATE_FORMAT="+%Y%m%d-%H%M%S"
 export GNUPGHOME="/home/fox/.config/gnupg"
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
 
-BORG_PASSPHRASE="$(pass backup/$(hostname))"
+BORG_PASSPHRASE="$(cat ~/.cache/borg/key)"
 export BORG_PASSPHRASE
 BORG_RSH="ssh -i /home/fox/.ssh/machine"
 export BORG_RSH
@@ -46,9 +46,13 @@ export BORG_RSH
 LAST_SNAPSHOT="$(snapper -c home list | grep timeline | tail -n1)"
 LATEST_SNAPSHOT_ID="$(echo $LAST_SNAPSHOT | awk -F\| '{print $2}' | tr -d ' ')"
 LATEST_DATE=$(echo $LAST_SNAPSHOT | awk -F\| '{print $4}' | xargs -0 date "+%s" -d)
+BORG_LIST=0
 
-if ! BORG_LIST=$(borg list borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG | tail -n 1 | awk '{print $3 " " $4}' | xargs -0 date "+%s" -d); then
-    borg init --umask 0027 --encryption=repokey-blake2 borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG
+if ! borg info borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG &> /dev/null; then
+    borg init --umask 0027 --encryption=repokey-blake2 borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG || true
+fi
+if ! BORG_LIST=$(borg list borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG | tail -n 1 | awk '{print $3 " " $4}' | xargs -0 date "+%s" -d) &> /dev/null; then
+    BORG_LIST=0
 fi
 
 if [ $LATEST_DATE -gt ${BORG_LIST//-} ];
@@ -59,6 +63,8 @@ then
         sudo backup-sudo cleanup "${SUBVOLUME%/}/.snapshots/backup"
     }
     trap cleanup EXIT
+    mkdir -p ~/.config/borg || true
+    touch ~/.config/borg/exclude
     if ! borg create --umask 0027 -v -p --stats -C lz4 \
         -e "*/proc" \
         -e "*/sys" \
@@ -66,18 +72,14 @@ then
         -e "*/run" \
         -e "*/tmp" \
         -e "*/var/cache" \
-        -e "*/.cache" \
-        -e "*/Media" \
-        -e "*/Bilder" \
-        -e "*/Pictures" \
-        -e "*/Downloads" \
         -e "*/var/lib/archbuild" \
         -e "*/var/lib/build" \
         -e "*/.config/borg/security" \
         -e "*/.snapshots/backup/snapshot/.snapshots" \
         -e "*/.snapshots/backup/info.xml" \
+        --exclude-from ~/.config/borg/exclude \
     borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG::$(date $DATE_FORMAT) "${SUBVOLUME%/}/.snapshots/backup"; then
-        notify-send -u critical "Backup $SNAPPER_CONFIG failed!"
+        notify-send -u critical "Backup $SNAPPER_CONFIG failed"
     fi
     # notify-send "$SNAPPER_CONFIG backup done"
     borg prune --umask 0027 -v borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG \

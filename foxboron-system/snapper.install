@@ -1,5 +1,22 @@
 post_install () {
-    #systemctl enable --now snapper-backup.timer
+    if [ ! -d /var/btrfs ]; then
+        mkdir /var/btrfs
+        mount /dev/mapper/lvm /var/btrfs || true
+        genfstab -U -f /var/btrfs >> /etc/fstab
+    fi
+    if [ ! -d /home/.snapshots ]; then
+        mkdir /home/.snapshots
+        btrfs subvolume create /var/btrfs/@home-snapshots
+        mount -t btrfs -o subvol=@home-snapshots /dev/mapper/lvm /home/.snapshots
+        genfstab -U -f /home/.snapshots / >> /etc/fstab
+    fi
+    if [ ! -d /.snapshots ]; then
+        mkdir /.snapshots
+        btrfs subvolume create /var/btrfs/@root-snapshots
+        mount -t btrfs -o subvol=@home-snapshots /dev/mapper/lvm /.snapshots
+        genfstab -U -f /.snapshots / >> /etc/fstab
+    fi
+    systemctl enable --now snapper-backup
     systemctl enable --now snapper-cleanup.timer
 }
 
