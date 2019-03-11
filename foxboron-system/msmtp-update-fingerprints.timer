@@ -1,0 +1,10 @@
+[Unit]
+Description=Syncer fingerprints from msmtp
+
+[Timer]
+Persistent=true
+OnBootSec=30s
+OnCalendar=hourly
+
+[Install]
+WantedBy=default.target

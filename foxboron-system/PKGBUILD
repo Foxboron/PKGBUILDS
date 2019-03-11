@@ -27,6 +27,8 @@ source=('timers-timer@.timer'
         'backup-backup-snapper-cleanup.service'
         'system-sudoers'
         'pacreport.conf'
+		'patch-pacman.conf.patch'
+		'patch-makepkg.conf.patch'
         'theia-capslock.hwdb'
         'theia-thinkfan.conf'
         'theia-thinkpad_acpi.conf'
@@ -54,7 +56,7 @@ source=('timers-timer@.timer'
 
 sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '148cffd0796d1fa2b1d9bba9274493bd9cfc2d5a524ffc0e03fc2d6e8e2c53fb'
-            'c09ecb17de19162114ab8572a794391088a6ea292e004d3ebd37aef2abd5c518'
+            '0f83ceff8d1dbeeb44707158ec850995d99001024cb52a4e3dde311b3251b281'
             'f5252e9184f5469bb7d4091359f752674b5925efe670a19aa65177b7409713b5'
             '9eae320f6f0842d0692d46020125432350ed25fbddec2d9829d16ca7f43991c5'
             'fba676be6530edb1f4db5bc4bf7ea9ddcd8209822b797bd0f45e7fce5bbb940c'
@@ -92,16 +94,42 @@ sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '76097926beead2ec82bc0da042ba1d5013d745d3d8d90239e9cecac32b174f6a')
 
 package_foxboron-packages(){
-    depend=('gvim', 'feh', 'ctags', 'feh', 'tlp', 'udiskie',
-    'gnupg', 'pass', 'htop', 'stow', 'xorg-xinit', 'xorg-server',
-    'xbindkeys', 'xorg-setxkbdmap', 'xdotool', 'mpv', 'ttf-dejavu',
-    'noto-fonts', 'unclutter', 'compton', 'rofi', 'termite',
-    'lm_sensors', 'pulseaudio', 'pulseadui-alsa', 'pavucontrol',
-    'alsa-utils', 'mosh', 'ssh', 'qutebrowser', 'chromium', 'task',
-    'mutt', 'xf86-video-intel' , 'gtk2', 'redshift', 'zathura',
-    'zathura-pdf-mupdf', 'i3lock', 'imv', 'playerctl', 'task',
-    'urlwatch', 'python-beautifulsoup4' 'xorg-xset' 'dunst' 'mpv'
-    'expac' 'acpi_call' 'xsel' 'exa' 'task')
+    depend=(
+
+	# xorg
+	'xorg-server' 'xorg-setxkbmap' 'xorg-xinit' 'xorg-xset'
+	'intel-ucode' 'xf86-video-intel' 'xorg-xrandr'
+
+	# DE
+	'i3-gaps' 'xorg-xset' 'i3lock' 'redshift' 'termite' 'feh'
+	'dunst' 'redshift' 'playerctl' 'noto-fonts' 'unclutter'
+	'compton' 'rofi' 'ttf-dejavu' 'xdotool' 'xbindkeys'
+	'pavucontrol' 'qutebrowser' 'chromium' 'xss-lock'
+	
+	# System
+	'tlp' 'udiskie' 'usbguard' 'lm_sensors' 'pulseaudio'
+	'pulseaudio-alsa' 'networkmanager' 'zsh' 'fwupd'
+	'bolt' 'wireguard-tools'
+
+
+	# Utilities
+	'gnupg' 'pass' 'mpv' 'expac' 'xsel' 'exa'
+	'zathura-pdf-mupdf' 'zathura' 'imv' 'mosh' 'ssh'
+	'htop' 'task' 'yubikey-manager' 'pass-otp'
+	'nvchecker' 'tmux' 'tig' 'git' 'pacman-contrib'
+	'hub' 'darktable'
+
+	# Editor
+	'gvim' 'ctags' 'fzf' 'ripgrep'
+
+	# latex
+	'biber' 'texlive-bibtexextra' 'texlive-core'
+	'texlive-fontsextra' 'texlive-latexextra'
+	'zathura' 'zathura-pdfp-mupdf'
+
+	# Mail
+	'neomutt' 'offlineimap' 'afew' 'notmuch' 'msmtp'
+	)
 }
 
 package_base-system(){
@@ -110,14 +138,32 @@ package_base-system(){
     install -dm0750 "$pkgdir"/etc/sudoers.d
     install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/10-system
     install -Dm0644 pacreport.conf "$pkgdir"/etc/pacreport.conf
-    install -Dm0644 bfq-60-scheduler.rules "$pkgdir"/etc/udev/rules.d/60-scheduler.rules
+    #install -Dm0644 bfq-60-scheduler.rules "$pkgdir"/etc/udev/rules.d/60-scheduler.rules
     install -Dm0644 fontconfig-local.conf "$pkgdir"/etc/fonts/local.conf
     install -Dm0755 hook-patch-system-configs.hook "$pkgdir"/usr/share/libalpm/hooks/patch-system-configs.hook
     install -Dm0755 hook-patch-system-configs.scripts "$pkgdir"/usr/share/libalpm/scripts/patch-system-configs
+    install -Dm0644 NetworkManager.conf "$pkgdir"/etc/NetworkManager/NetworkManager.conf
+
     install -Dm0644 patch-pacman.conf.patch "$pkgdir"/usr/share/system-config/patches/pacman.conf.patch
     install -Dm0644 patch-makepkg.conf.patch "$pkgdir"/usr/share/system-config/patches/makepkg.conf.patch
-    install -Dm0644 pacman-aur.conf "$pkgdir"/etc/pacman.d/aur
-    install -Dm0644 NetworkManager.conf "$pkgdir"/etc/NetworkManager/NetworkManager.conf
+    install -Dm0644 pacman-aur.conf  "$pkgdir"/etc/pacman.d/aur.conf
+	install -Dm0644 patch-pacman.conf.patch "$pkgdir"/usr/share/libalpm/hooks/pacman.conf.patch
+	install -Dm0644 patch-makepkg.conf.patch "$pkgdir"/usr/share/libalpm/hooks/makepkg.conf.patch
+
+    ln -sf /usr/share/zoneinfo/Europe/London "$pkgdir"/etc/localtime
+}
+
+package_foxboron-mail(){
+    depends=('base-system' 'neomutt' 'notmuch' 'afew' 'msmtp')
+	install -Dm644 msmtp-update-fingerprints.service -t "$pkgdir"/etc/systemd/system/
+	install -Dm644 msmtp-update-fingerprints.timer -t "$pkgdir"/etc/systemd/system/
+	install -Dm755 msmtp-update-fingerprints -t "$pkgdir"/usr/bin/
+
+	install -Dm644 mail.timer -t "$pkgdir"/etc/systemd/system/
+	install -Dm644 mail.target -t "$pkgdir"/etc/systemd/system/
+	install -Dm644 offlineimap.service -t "$pkgdir"/etc/systemd/system/
+	install -Dm644 afew.service -t "$pkgdir"/etc/systemd/system/
+	install -Dm644 notmuch.service -t "$pkgdir"/etc/systemd/system/
 }
 
 package_theia-system(){
@@ -135,7 +181,7 @@ package_theia-system(){
 }
 
 package_anathema-system(){
-    depends=('base-system' 'acpid')
+    depends=('base-system')
     install -Dm0644 theia-capslock.hwdb "$pkgdir"/etc/udev/hwdb.d/61-theia-capslock.hwdb
     install -Dm0644 x11-99-keyboard.conf "$pkgdir"/etc/X11/xorg.conf.d/99-keyboard.conf
     install -Dm0644 x11-99-touchpad-disable.conf "$pkgdir"/etc/X11/xorg.conf.d/99-touchpad-disable.conf
@@ -168,10 +214,14 @@ package_foxboron-backup(){
 package_foxboron-pacman-backup(){
     # This really needs to be factored so we dont rely on bad dotfiles
     depends=('foxboron-pacman-backup')
-    install -Dm0755 backup-snap-boot-backup "$pkgdir"/usr/local/bin/snap-boot-back
+    install -Dm0755 backup-snap-boot-backup "$pkgdir"/usr/bin/snap-boot-back
     install -Dm0644 backup-50_bootbackup.hook "$pkgdir"/usr/share/libalpm/hooks/50_bootbackup.hook
     install -Dm0644 backup-zz_bootback.hook "$pkgdir"/usr/share/libalpm/hooks/zz_bootback.hook
     install -Dm0644 backup-snap-boot-config "$pkgdir"/usr/share/$pkgname/snap-boot.config
+}
+
+package_foxboron-msmtp(){
+    install -Dm0755 msmtp-update-fingerprints "$pkgdir"/usr/bin/msmtp-update-fingerprints
 }
 
 # Add tlp btrfs fix patch

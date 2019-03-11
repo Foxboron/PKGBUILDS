@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+for account in $(grep 'host\|port' ~/.config/msmtp/config | awk '{print $2}' | paste -d ":"  - -); do
+    fingerprint=$(openssl s_client -connect $account -starttls smtp < /dev/null 2>/dev/null | openssl x509 -fingerprint -noout | cut -d'=' -f2)
+    sed -i "/$(cut -d":" -f1 <(echo $account))/,/account/{s/tls_fingerprint \".*\"/tls_fingerprint \"$fingerprint\"/}" ~/.config/msmtp/config
+done

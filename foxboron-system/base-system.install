@@ -7,4 +7,25 @@ post_install () {
     systemctl enable --now tlp
     systemctl enable tlp-sleep.service
     systemctl mask systemd-rfkill.socket
+
+    if [[ "$(stat -f -c %T /)" == btrfs ]] && [ ! -d /var/btrfs ]; then
+        mkdir /var/btrfs
+        mount /dev/mapper/lvm /var/btrfs || true
+        genfstab -U -f /var/btrfs >> /etc/fstab
+    fi
+
+	if [[ "$(stat -f -c %T /)" == btrfs ]] && [ ! -d /var/swap ] ; then
+	
+		mkdir /var/swap
+        btrfs subvolume create /var/btrfs/@swap
+        mount -t btrfs -o subvol=@swap /dev/mapper/lvm /var/swap
+
+		truncate -s 0 /var/swap/swap
+		chattr +C /var/swap/swap
+		fallocate -l 8G /var/swap/swap
+		chmod 0600 /var/swap/swap
+		mkswap /var/swap/swap
+		swapon /var/swap/swap
+		genfstab -U -f "/var/swap" / >> /etc/fstab
+	fi
 }

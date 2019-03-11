@@ -1,9 +1,4 @@
 post_install () {
-    if [ ! -d /var/btrfs ]; then
-        mkdir /var/btrfs
-        mount /dev/mapper/lvm /var/btrfs || true
-        genfstab -U -f /var/btrfs >> /etc/fstab
-    fi
     if [ ! -d /home/.snapshots ]; then
         mkdir /home/.snapshots
         btrfs subvolume create /var/btrfs/@home-snapshots
