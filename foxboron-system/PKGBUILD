@@ -143,12 +143,14 @@ package_base-system(){
     install -Dm0755 hook-patch-system-configs.hook "$pkgdir"/usr/share/libalpm/hooks/patch-system-configs.hook
     install -Dm0755 hook-patch-system-configs.scripts "$pkgdir"/usr/share/libalpm/scripts/patch-system-configs
     install -Dm0644 NetworkManager.conf "$pkgdir"/etc/NetworkManager/NetworkManager.conf
+	install -Dm0644 fwupd-uefi.conf "$pkgdir"/etc/fwupd/uefi.conf
 
     install -Dm0644 patch-pacman.conf.patch "$pkgdir"/usr/share/system-config/patches/pacman.conf.patch
     install -Dm0644 patch-makepkg.conf.patch "$pkgdir"/usr/share/system-config/patches/makepkg.conf.patch
     install -Dm0644 pacman-aur.conf  "$pkgdir"/etc/pacman.d/aur.conf
 	install -Dm0644 patch-pacman.conf.patch "$pkgdir"/usr/share/libalpm/hooks/pacman.conf.patch
 	install -Dm0644 patch-makepkg.conf.patch "$pkgdir"/usr/share/libalpm/hooks/makepkg.conf.patch
+
 
     ln -sf /usr/share/zoneinfo/Europe/London "$pkgdir"/etc/localtime
 }
