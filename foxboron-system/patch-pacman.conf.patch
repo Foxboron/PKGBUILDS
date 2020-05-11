@@ -1,15 +1,15 @@
---- /etc/pacman.conf	2019-03-11 22:22:52.178790066 +0100
-+++ /etc/pacman.conf	2018-09-02 22:54:50.512457230 +0200
-@@ -23,7 +23,7 @@
+--- /etc/pacman.conf	2020-05-11 19:46:27.879928590 +0200
++++ /etc/pacman.conf	2020-05-10 13:33:34.865628859 +0200
+@@ -22,7 +22,7 @@
  Architecture = auto
  
  # Pacman won't upgrade packages listed in IgnorePkg and members of IgnoreGroup
 -#IgnorePkg   =
-+IgnorePkg   = linux linux-headers
++IgnorePkg   = linux linux-headers linux-lts
  #IgnoreGroup =
  
  #NoUpgrade   =
-@@ -69,8 +69,8 @@
+@@ -68,8 +68,8 @@
  # repo name header and Include lines. You can add preferred servers immediately
  # after the header, and they will be used before the default mirrors.
  
@@ -20,7 +20,7 @@
  
  [core]
  Include = /etc/pacman.d/mirrorlist
-@@ -78,8 +78,8 @@
+@@ -77,8 +77,8 @@
  [extra]
  Include = /etc/pacman.d/mirrorlist
  
@@ -31,9 +31,31 @@
  
  [community]
  Include = /etc/pacman.d/mirrorlist
-@@ -98,3 +98,5 @@
+@@ -86,14 +86,23 @@
+ # If you want to run 32 bit applications on your x86_64 system,
+ # enable the multilib repositories as required here.
+ 
+-#[multilib-testing]
+-#Include = /etc/pacman.d/mirrorlist
++[multilib-testing]
++Include = /etc/pacman.d/mirrorlist
+ 
+-#[multilib]
+-#Include = /etc/pacman.d/mirrorlist
++[multilib]
++Include = /etc/pacman.d/mirrorlist
+ 
+ # An example of a custom package repository.  See the pacman manpage for
+ # tips on creating your own repositories.
  #[custom]
  #SigLevel = Optional TrustAll
  #Server = file:///home/custompkgs
 +
-+Include = /etc/pacman.d/aur
++
++[lxd]
++SigLevel = Optional TrustAll
++Server = https://pkgbuild.com/~foxboron/repos/lxd/ 
++
++[aur]
++SigLevel = Optional TrustAll
++Server = file:///var/cache/pacman/aur

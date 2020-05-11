@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -euo pipefail
 shopt -s nullglob globstar
 
@@ -43,50 +42,47 @@ export BORG_PASSPHRASE
 BORG_RSH="ssh -i /home/fox/.ssh/machine"
 export BORG_RSH
 
-LAST_SNAPSHOT="$(snapper -c home list | grep timeline | tail -n1)"
-LATEST_SNAPSHOT_ID="$(echo $LAST_SNAPSHOT | awk -F\| '{print $2}' | tr -d ' ')"
-LATEST_DATE=$(echo $LAST_SNAPSHOT | awk -F\| '{print $4}' | xargs -0 date "+%s" -d)
+LAST_SNAPSHOT="$(snapper --json -c home list | jq -j '(.[] | reverse)[0]')"
+LATEST_SNAPSHOT_ID="$(echo $LAST_SNAPSHOT | jq -r '.number' )"
+LATEST_DATE=$(echo $LAST_SNAPSHOT | jq -j '.date' | xargs -0 date "+%s" -d)
 BORG_LIST=0
 
-if ! borg info borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG &> /dev/null; then
-    borg init --umask 0027 --encryption=repokey-blake2 borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG || true
+if ! borg info borg@linderud.dev:backup/$(hostname)/$SNAPPER_CONFIG &> /dev/null; then
+    borg init --umask 0027 --encryption=repokey-blake2 borg@linderud.dev:backup/$(hostname)/$SNAPPER_CONFIG || true
 fi
-if ! BORG_LIST=$(borg list borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG | tail -n 1 | awk '{print $3 " " $4}' | xargs -0 date "+%s" -d) &> /dev/null; then
+if ! BORG_LIST=$(borg list --json borg@linderud.dev:backup/$(hostname)/$SNAPPER_CONFIG | jq -j '(.archives | reverse)[0] | .time' | xargs -0 date "+%s" -d) &> /dev/null; then
     BORG_LIST=0
 fi
 
-if [ $LATEST_DATE -gt ${BORG_LIST//-} ];
-then
-    # notify-send "Started $SNAPPER_CONFIG backup"
-    sudo backup-sudo mount "${SUBVOLUME%/}/.snapshots/$LATEST_SNAPSHOT_ID" "${SUBVOLUME%/}/.snapshots/backup"
-    cleanup() {
-        sudo backup-sudo cleanup "${SUBVOLUME%/}/.snapshots/backup"
-    }
-    trap cleanup EXIT
-    mkdir -p ~/.config/borg || true
-    touch ~/.config/borg/exclude
-    if ! borg create --umask 0027 -v -p --stats -C lz4 \
-        -e "*/proc" \
-        -e "*/sys" \
-        -e "*/dev" \
-        -e "*/run" \
-        -e "*/tmp" \
-        -e "*/var/cache" \
-        -e "*/var/lib/archbuild" \
-        -e "*/var/lib/build" \
-        -e "*/.config/borg/security" \
-        -e "*/.snapshots/backup/snapshot/.snapshots" \
-        -e "*/.snapshots/backup/info.xml" \
-        --exclude-from ~/.config/borg/exclude \
-    borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG::$(date $DATE_FORMAT) "${SUBVOLUME%/}/.snapshots/backup"; then
-        notify-send -u critical "Backup $SNAPPER_CONFIG failed"
-    fi
-    # notify-send "$SNAPPER_CONFIG backup done"
-    borg prune --umask 0027 -v borg@velox.vulpes.pw:$(hostname)/$SNAPPER_CONFIG \
-           --keep-hourly 24 \
-           --keep-daily   7 \
-           --keep-weekly  4 \
-           --keep-monthly 6
-else
-    echo "Allready have a backup with the given date"
+test $LATEST_DATE -lt ${BORG_LIST//-} && exit 0
+
+# notify-send "Started $SNAPPER_CONFIG backup"
+sudo backup-sudo mount "${SUBVOLUME%/}/.snapshots/$LATEST_SNAPSHOT_ID" "${SUBVOLUME%/}/.snapshots/backup"
+cleanup() {
+    sudo backup-sudo cleanup "${SUBVOLUME%/}/.snapshots/backup"
+}
+trap cleanup EXIT
+mkdir -p ~/.config/borg || true
+touch ~/.config/borg/exclude
+if ! borg create --stats --umask 0027 -v -p -C zstd \
+    --pattern="!/.snapshots/*/snapshot/proc" \
+    --pattern="!/.snapshots/*/snapshot/sys" \
+    --pattern="!/.snapshots/*/snapshot/dev" \
+    --pattern="!/.snapshots/*/snapshot/run" \
+    --pattern="!/.snapshots/*/snapshot/tmp" \
+    --pattern="!/.snapshots/*/snapshot/var/cache" \
+    --pattern="!/.snapshots/*/snapshot/var/lib/archbuild" \
+    --pattern="!/.snapshots/*/snapshot/var/lib/build" \
+    --pattern="!/.snapshots/*/snapshot/tmp" \
+    --pattern="!/.snapshots/backup/snapshot/.snapshots" \
+    --pattern="!/.snapshots/backup/info.xml" \
+    --patterns-from ~/.config/borg/exclude \
+borg@linderud.dev:backup/$(hostname)/$SNAPPER_CONFIG::$(date $DATE_FORMAT) "${SUBVOLUME%/}/.snapshots/backup"; then
+    notify-send -u critical "Backup $SNAPPER_CONFIG failed"
 fi
+# notify-send "$SNAPPER_CONFIG backup done"
+borg prune --umask 0027 -v borg@linderud.dev:backup/$(hostname)/$SNAPPER_CONFIG \
+       --keep-hourly 24 \
+       --keep-daily   7 \
+       --keep-weekly  4 \
+       --keep-monthly 6

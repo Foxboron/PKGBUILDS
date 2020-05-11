@@ -1,5 +1,5 @@
---- /etc/makepkg.conf	2019-03-11 22:24:08.462081231 +0100
-+++ /etc/makepkg.conf	2019-03-11 22:24:04.238748577 +0100
+--- /etc/makepkg.conf	2020-01-05 11:42:19.129112866 +0100
++++ /etc/makepkg.conf	2020-01-05 11:41:37.258723976 +0100
 @@ -41,7 +41,7 @@
  CXXFLAGS="-march=x86-64 -mtune=generic -O2 -pipe -fno-plt"
  LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
@@ -9,3 +9,20 @@
  #-- Debugging flags
  DEBUG_CFLAGS="-g -fvar-tracking-assignments"
  DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"
+@@ -130,7 +130,7 @@
+ COMPRESSGZ=(gzip -c -f -n)
+ COMPRESSBZ2=(bzip2 -c -f)
+ COMPRESSXZ=(xz -c -z -)
+-COMPRESSZST=(zstd -c -z -q -)
++COMPRESSZST=(zstd -c -T0 --ultra -20 -)
+ COMPRESSLRZ=(lrzip -q)
+ COMPRESSLZO=(lzop -q)
+ COMPRESSZ=(compress -c -f)
+@@ -141,5 +141,5 @@
+ # EXTENSION DEFAULTS
+ #########################################################################
+ #
+-PKGEXT='.pkg.tar.xz'
+-SRCEXT='.src.tar.gz'
++PKGEXT='.pkg.tar.zst'
++SRCEXT='.src.tar.zst'
