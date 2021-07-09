@@ -1,0 +1,11 @@
+--- /etc/fwupd/uefi_capsule.conf	2021-07-09 18:26:04.057223650 +0200
++++ /etc/fwupd/uefi_capsule.conf	2021-02-20 12:34:39.798585762 +0100
+@@ -2,7 +2,7 @@
+ 
+ # the shim loader is required to chainload the fwupd EFI binary unless
+ # the fwupd.efi file has been self-signed manually
+-#DisableShimForSecureBoot=true
++DisableShimForSecureBoot=true
+ 
+ # the EFI system partition path used
+ # if this is is not /boot/efi, /boot, or /efi

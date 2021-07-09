@@ -1,16 +1,18 @@
 # Maintainer: Morten Linderud <morten@linderud.pw>
 
 pkgbase=foxboron-system
-pkgname=('base-system'
+pkgname=(
+         'base-system'
          'theia-system'
          'foxboron-timers'
          'foxboron-backup'
+         'patch-system'
          )
 pkgver=10
 pkgrel=1
 pkgdesc="System configs"
 arch=("any")
-url="https://velox.pw/"
+url="https://linderud.dev/"
 license=('MIT')
 source=('timers-timer@.timer'
         'timers-timer@.target'
@@ -53,8 +55,7 @@ source=('timers-timer@.timer'
         'snapper-root'
         'snapper-home'
         'snapper-conf.d'
-        'fwupd-uefi.conf'
-        )
+)
 
 sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '148cffd0796d1fa2b1d9bba9274493bd9cfc2d5a524ffc0e03fc2d6e8e2c53fb'
@@ -146,20 +147,20 @@ package_base-system(){
     install -Dm0644 pacreport.conf "$pkgdir"/etc/pacreport.conf
     #install -Dm0644 bfq-60-scheduler.rules "$pkgdir"/etc/udev/rules.d/60-scheduler.rules
     install -Dm0644 fontconfig-local.conf "$pkgdir"/etc/fonts/local.conf
-    install -Dm0644 hook-patch-system-configs.hook "$pkgdir"/usr/share/libalpm/hooks/90-patch-system-configs.hook
-    install -Dm0755 hook-patch-system-configs.scripts "$pkgdir"/usr/share/libalpm/scripts/patch-system-configs
     install -Dm0644 hook-bootctl-upgrade.hook "$pkgdir"/usr/share/libalpm/hooks/90-bootctl-upgrade.hook
     install -Dm0644 NetworkManager.conf "$pkgdir"/etc/NetworkManager/NetworkManager.conf
-    install -Dm0644 fwupd-uefi.conf "$pkgdir"/etc/fwupd/uefi.conf
-
-    install -Dm0644 patch-pacman.conf.patch "$pkgdir"/usr/share/system-config/patches/pacman.conf.patch
-    install -Dm0644 patch-makepkg.conf.patch "$pkgdir"/usr/share/system-config/patches/makepkg.conf.patch
     install -Dm0644 pacman-aur.conf  "$pkgdir"/etc/pacman.d/aur.conf
-    install -Dm0644 patch-pacman.conf.patch "$pkgdir"/usr/share/libalpm/hooks/pacman.conf.patch
-    install -Dm0644 patch-makepkg.conf.patch "$pkgdir"/usr/share/libalpm/hooks/makepkg.conf.patch
-
-
     ln -sf /usr/share/zoneinfo/Europe/Oslo "$pkgdir"/etc/localtime
+}
+
+
+_patch_system=(*.patch)
+package_patch-system(){
+    install -Dm0644 hook-patch-system-configs.hook "$pkgdir"/usr/share/libalpm/hooks/90-patch-system-configs.hook
+    install -Dm0755 hook-patch-system-configs.scripts "$pkgdir"/usr/share/libalpm/scripts/patch-system-configs
+    for p in ${_patch_system[@]}; do
+        install -Dm0644 "$p" "$pkgdir/usr/share/system-config/patches/${p#patch-}"
+    done
 }
 
 package_foxboron-mail(){

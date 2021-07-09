@@ -1,15 +1,29 @@
---- /etc/pacman.conf	2020-05-11 19:46:27.879928590 +0200
-+++ /etc/pacman.conf	2020-05-10 13:33:34.865628859 +0200
+--- /etc/pacman.conf	2021-07-09 18:37:11.257162082 +0200
++++ /etc/pacman.conf	2021-07-09 18:37:01.567067769 +0200
 @@ -22,7 +22,7 @@
  Architecture = auto
  
  # Pacman won't upgrade packages listed in IgnorePkg and members of IgnoreGroup
 -#IgnorePkg   =
-+IgnorePkg   = linux linux-headers linux-lts
++IgnorePkg   = linux linux-headers linux-lts linux-lts-headers
  #IgnoreGroup =
  
  #NoUpgrade   =
-@@ -68,8 +68,8 @@
+@@ -30,11 +30,11 @@
+ 
+ # Misc options
+ #UseSyslog
+-#Color
++Color
+ #NoProgressBar
+ CheckSpace
+ #VerbosePkgLists
+-#ParallelDownloads = 5
++ParallelDownloads = 10
+ 
+ # By default, pacman accepts packages signed by keys that its local keyring
+ # trusts (see pacman-key and its man page), as well as unsigned packages.
+@@ -69,8 +69,8 @@
  # repo name header and Include lines. You can add preferred servers immediately
  # after the header, and they will be used before the default mirrors.
  
@@ -20,7 +34,7 @@
  
  [core]
  Include = /etc/pacman.d/mirrorlist
-@@ -77,8 +77,8 @@
+@@ -78,8 +78,8 @@
  [extra]
  Include = /etc/pacman.d/mirrorlist
  
@@ -31,7 +45,7 @@
  
  [community]
  Include = /etc/pacman.d/mirrorlist
-@@ -86,14 +86,23 @@
+@@ -87,14 +87,18 @@
  # If you want to run 32 bit applications on your x86_64 system,
  # enable the multilib repositories as required here.
  
@@ -50,11 +64,6 @@
  #[custom]
  #SigLevel = Optional TrustAll
  #Server = file:///home/custompkgs
-+
-+
-+[lxd]
-+SigLevel = Optional TrustAll
-+Server = https://pkgbuild.com/~foxboron/repos/lxd/ 
 +
 +[aur]
 +SigLevel = Optional TrustAll
