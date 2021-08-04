@@ -3,8 +3,8 @@
 # Maintainer: Thomas Bächler <thomas@archlinux.org>
 
 pkgname=mkinitcpio
-pkgver=30.r14.g34be8f7
-pkgrel=1
+pkgver=30
+pkgrel=2.1
 pkgdesc="Modular initramfs image creation utility"
 arch=('any')
 url="https://projects.archlinux.org/mkinitcpio.git/"
@@ -20,19 +20,21 @@ optdepends=('gzip: Use gzip compression for the initramfs image'
             'mkinitcpio-nfs-utils: Support for root filesystem on NFS')
 provides=('initramfs')
 backup=('etc/mkinitcpio.conf')
-source=("git+https://github.com/archlinux/$pkgname.git")
+source=("git+https://github.com/archlinux/$pkgname.git"
+        "https://patch-diff.githubusercontent.com/raw/archlinux/mkinitcpio/pull/55.patch"
+        "https://patch-diff.githubusercontent.com/raw/archlinux/mkinitcpio/pull/56.patch"
+        "https://patch-diff.githubusercontent.com/raw/archlinux/mkinitcpio/pull/58.patch")
 install=mkinitcpio.install
-sha512sums=('SKIP')
-
-pkgver() {
-    cd $pkgname
-    git describe --long --tags | sed -r 's/^v//; s/([^-]*-g)/r\1/; s/-/./g'
-}
+sha512sums=('SKIP'
+            '0dd8eb066d178c3248a9fac8059c8af5d3f60fc953a31b9c71dc1788d7d368953f5e44bc9b2a338dcb2e34aadc6df8e01f601e9cd212bfa4fd7efa91bb61f44d'
+            '43924ac9210858e30e79787dbae7013236f7a8169b42f5b909b4d0090e2d540491d7cf27e7bbfd55cee8977a018c585f90fe102e4b4098d1a3951f09e2a33bee'
+            '149080188fac0a9361bfefbc9c206e31aab5d58af342ff575e7d6c7ec19a0bf6d15f09fd35cb8e68be920db6fadc31d4c43ae56590758e37c9efea1e4cab95bb')
 
 prepare() {
   cd $pkgname
-  git fetch origin pull/53/head
-  git merge FETCH_HEAD
+  patch -Np1 < "$srcdir/55.patch"
+  patch -Np1 < "$srcdir/56.patch"
+  patch -Np1 < "$srcdir/58.patch"
 }
 
 build() {
