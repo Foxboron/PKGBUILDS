@@ -32,11 +32,24 @@ _btrfs_setup_swap(){
     genfstab -U -f "/var/swap" / >> /etc/fstab
 }
 
+_btrfs_mksubvol(){
+    [ -d "$1" ] && return
+    btrfs subvolume create "/var/btrfs/$2"
+    genfstab -U -f "$1" >> /etc/fstab
+    mkdir /$1_tmp
+    mv -f /$1/ /$1_tmp
+    mount -t btrfs -o subvol="$2" /dev/mapper/root "$1"
+}
+
 
 post_install () {
     _setup_aurutils
     if [[ "$(stat -f -c %T /)" == btrfs ]]  ; then
         [ ! -d /var/btrfs ] && _btrfs_setup
         [ ! -d /var/swap ] && _btrfs_setup_swap
+        _btrfs_mksubvol /srv @srv
+        _btrfs_mksubvol /var @var
+        _btrfs_mksubvol /home @home
+        _btrfs_mksubvol /opt @opt
     fi
 }

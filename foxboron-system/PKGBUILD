@@ -28,13 +28,9 @@ source=('timers-timer@.timer'
         'backup-snap-boot-config'
         'backup-backup-snapper-cleanup.service'
         'system-sudoers'
-        'pacreport.conf'
-        'patch-pacman.conf.patch'
-        'patch-makepkg.conf.patch'
         'theia-capslock.hwdb'
         'theia-thinkfan.conf'
         'theia-thinkpad_acpi.conf'
-        'fontconfig-local.conf'
         'acpid-thinkpad-dock-lenovo'
         'acpid-thinkpad-undock-lenovo'
         'acpid-thinkpad-dock.sh'
@@ -45,16 +41,14 @@ source=('timers-timer@.timer'
         'udev-95-disable-ir-camera.rules'
         'udev-95-thunderbolt.rules'
         'bin-hotplug_monitor'
-        'hook-patch-system-configs.hook'
-        'hook-patch-system-configs.scripts'
         'hook-bootctl-upgrade.hook'
-        'patch-makepkg.conf.patch'
-        'patch-pacman.conf.patch'
         'pacman-aur.conf'
         'NetworkManager.conf'
         'snapper-root'
         'snapper-home'
         'snapper-conf.d'
+        'hook-patch-system-configs.hook'
+        'hook-patch-system-configs.scripts'
 )
 
 sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
@@ -72,8 +66,6 @@ sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '08e1d51e9559f89f8d6a57a3134b05295d8ace56cddac3aa97a0f3792b68ee91'
             '053e38a80a8162450b9e145c119b9cee0385a869b26d24bb3f681bff78137592'
             'e1bce4e528671b51d57a082d10f903c11ec287a96d1ca0acdad9d13dc6d6c04f'
-            'cb3545480e167dbe9d128916943c75d0a9415531933589de1034b9f0fceea0ec'
-            '7611d5661ecbc653849f5661980d76c0381536975626290e870c4ff0ff882081'
             '825f6500e22b3f8a9ecde110cb14c51a97399481b33123981d1f950dccc268a3'
             '2e15377025beca05b6a1f82bf7e17da3389bae718a5d720384b2ff72bbeb9ec2'
             '28874576641b3cc1aa486e1bc9ed40eadfe8b13d6d3014016e31fedc5dc5195f'
@@ -88,66 +80,55 @@ sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '4522cbcc44872e5816a4aa7db19b8aff402ec1c4fbdad05d645afb3233461356'
             '586e528f06337f2ddac6ae813da6acc41d5aff99510815083d2b6ba75048b8e6'
             '593b49b294d4a2c4b58f2c7f72d6bfbb43ec92f446b568bdea8d1949ab7ff2b0'
-            'e03ee1956c15ab4041dc5a29c978d0017ac5d8bce782f813b55bd0193fa7672e'
-            '9e17874e5db1bc22a2fdc5bbb1902069f545f82d926db0ab7df6c962925f3178'
             '3295c32224753a6f1d409b7de810af63c3fd1d987c193486caae84c8b66ba2c2'
-            '7611d5661ecbc653849f5661980d76c0381536975626290e870c4ff0ff882081'
-            'cb3545480e167dbe9d128916943c75d0a9415531933589de1034b9f0fceea0ec'
             '7c441eeccea11b5a5ed6c4a4311e33a18930437ba40414289e223612c1d328c9'
             '2c1ccf551e29d2925ab6cbea3d7a361e6f6218a12bf1e99e870ad605962a8105'
             'e8b40c151eb20db7cff213de28a63a9f8fa69ba371842ea18fcab11265ed2b87'
             '408efa4f9eceedcb2a3acffc126f96ffc890abb0bdc55844f50257490d7d18b4'
             '76097926beead2ec82bc0da042ba1d5013d745d3d8d90239e9cecac32b174f6a'
-            '658877e783211b4d9e64d8d00c482ac4afa5c70b909102ea75222f8e7a8341e4')
+            'e03ee1956c15ab4041dc5a29c978d0017ac5d8bce782f813b55bd0193fa7672e'
+            '9e17874e5db1bc22a2fdc5bbb1902069f545f82d926db0ab7df6c962925f3178')
 
 package_foxboron-packages(){
     depend=(
-
 	# xorg
 	'xorg-server' 'xorg-setxkbmap' 'xorg-xinit' 'xorg-xset'
-	'intel-ucode' 'xf86-video-intel' 'xorg-xrandr'
+	'intel-ucode' 'xorg-xrandr'
 
 	# DE
-	'i3-gaps' 'xorg-xset' 'i3lock' 'redshift' 'termite' 'feh'
+	'i3-gaps' 'xorg-xset' 'i3lock' 'redshift' 'alacritty' 'feh'
 	'dunst' 'redshift' 'playerctl' 'noto-fonts' 'unclutter'
-	'compton' 'rofi' 'ttf-dejavu' 'xdotool' 'xbindkeys'
+	'picom' 'rofi' 'ttf-dejavu' 'xdotool'
 	'pavucontrol' 'qutebrowser' 'chromium' 'xss-lock'
 	
 	# System
-	'tlp' 'udiskie' 'usbguard' 'lm_sensors' 'pulseaudio'
-	'pulseaudio-alsa' 'networkmanager' 'zsh' 'fwupd'
-	'bolt' 'wireguard-tools'
-
+	'tlp' 'udiskie' 'usbguard' 'lm_sensors'
+        'networkmanager' 'zsh' 'fwupd'
+	'bolt' 'wireguard-tools' 'pipewire'
 
 	# Utilities
-	'gnupg' 'pass' 'mpv' 'expac' 'xsel' 'exa'
+	'gnupg' 'pass' 'mpv' 'expac' 'xsel'
 	'zathura-pdf-mupdf' 'zathura' 'imv' 'mosh' 'ssh'
 	'htop' 'task' 'yubikey-manager' 'pass-otp'
 	'nvchecker' 'tmux' 'tig' 'git' 'pacman-contrib'
-	'hub' 'darktable'
+	'hub' 'darktable' 'github-cli' 'podman' 'podman-docker'
+        'pacutils'
 
 	# Editor
 	'gvim' 'ctags' 'fzf' 'ripgrep'
 
 	# latex
-	'biber' 'texlive-bibtexextra' 'texlive-core'
-	'texlive-fontsextra' 'texlive-latexextra'
-	'zathura' 'zathura-pdfp-mupdf'
-
-	# Mail
-	'neomutt' 'offlineimap' 'afew' 'notmuch' 'msmtp'
+	# 'biber' 'texlive-bibtexextra' 'texlive-core'
+	# 'texlive-fontsextra' 'texlive-latexextra'
+	# 'zathura' 'zathura-pdfp-mupdf'
 	)
 }
 
 package_base-system(){
-    depends=('ttf-hack' 'noto-fonts-emoji' 'sudo' 'pacutils')
     install=base-system.install
     install -dm0750 "$pkgdir"/etc/sudoers.d
     install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/10-system
-    install -Dm0644 pacreport.conf "$pkgdir"/etc/pacreport.conf
-    #install -Dm0644 bfq-60-scheduler.rules "$pkgdir"/etc/udev/rules.d/60-scheduler.rules
-    install -Dm0644 fontconfig-local.conf "$pkgdir"/etc/fonts/local.conf
-    install -Dm0644 hook-bootctl-upgrade.hook "$pkgdir"/usr/share/libalpm/hooks/90-bootctl-upgrade.hook
+    install -Dm0644 hook-bootctl-upgrade.hook "$pkgdir"/etc/pacman.d/hooks/100-bootctl-upgrade.hook
     install -Dm0644 NetworkManager.conf "$pkgdir"/etc/NetworkManager/NetworkManager.conf
     install -Dm0644 pacman-aur.conf  "$pkgdir"/etc/pacman.d/aur.conf
     ln -sf /usr/share/zoneinfo/Europe/Oslo "$pkgdir"/etc/localtime
@@ -155,6 +136,7 @@ package_base-system(){
 
 
 _patch_system=(*.patch)
+source+=("${_patch_system[@]}")
 package_patch-system(){
     install -Dm0644 hook-patch-system-configs.hook "$pkgdir"/usr/share/libalpm/hooks/90-patch-system-configs.hook
     install -Dm0755 hook-patch-system-configs.scripts "$pkgdir"/usr/share/libalpm/scripts/patch-system-configs
@@ -165,15 +147,11 @@ package_patch-system(){
 
 package_foxboron-mail(){
     depends=('base-system' 'neomutt' 'notmuch' 'afew' 'msmtp')
-	install -Dm644 msmtp-update-fingerprints.service -t "$pkgdir"/etc/systemd/system/
-	install -Dm644 msmtp-update-fingerprints.timer -t "$pkgdir"/etc/systemd/system/
-	install -Dm755 msmtp-update-fingerprints -t "$pkgdir"/usr/bin/
-
-	install -Dm644 mail.timer -t "$pkgdir"/etc/systemd/system/
-	install -Dm644 mail.target -t "$pkgdir"/etc/systemd/system/
-	install -Dm644 offlineimap.service -t "$pkgdir"/etc/systemd/system/
-	install -Dm644 afew.service -t "$pkgdir"/etc/systemd/system/
-	install -Dm644 notmuch.service -t "$pkgdir"/etc/systemd/system/
+    install -Dm644 mail.timer  "$pkgdir"/etc/systemd/user/
+    install -Dm644 mail.target  "$pkgdir"/etc/systemd/user/
+    install -Dm644 offlineimap.service  "$pkgdir"/etc/systemd/user/
+    install -Dm644 afew.service  "$pkgdir"/etc/systemd/user/
+    install -Dm644 notmuch.service  "$pkgdir"/etc/systemd/user/
 }
 
 package_theia-system(){
@@ -202,8 +180,10 @@ package_anathema-system(){
 
 package_foxboron-timers(){
     install=timers.install
-    install -Dm0644 timers-timer@.target "$pkgdir"/usr/lib/systemd/system/timer@.target
-    install -Dm0644 timers-timer@.timer "$pkgdir"/usr/lib/systemd/system/timer@.timer
+    for p in timers-*; do
+        install -Dm0644 "$p" "$pkgdir/usr/lib/systemd/system/${p#timers-}"
+        install -Dm0644 "$p" "$pkgdir/usr/lib/systemd/user/${p#timers-}"
+    done
 }
 
 package_foxboron-backup(){
@@ -222,16 +202,8 @@ package_foxboron-backup(){
 }
 
 package_foxboron-pacman-backup(){
-    # This really needs to be factored so we dont rely on bad dotfiles
-    depends=('foxboron-pacman-backup')
     install -Dm0755 backup-snap-boot-backup "$pkgdir"/usr/bin/snap-boot-back
     install -Dm0644 backup-50_bootbackup.hook "$pkgdir"/usr/share/libalpm/hooks/50_bootbackup.hook
     install -Dm0644 backup-zz_bootback.hook "$pkgdir"/usr/share/libalpm/hooks/zz_bootback.hook
     install -Dm0644 backup-snap-boot-config "$pkgdir"/usr/share/$pkgname/snap-boot.config
 }
-
-package_foxboron-msmtp(){
-    install -Dm0755 msmtp-update-fingerprints "$pkgdir"/usr/bin/msmtp-update-fingerprints
-}
-
-# Add tlp btrfs fix patch

@@ -2,13 +2,13 @@ post_install () {
     if [ ! -d /home/.snapshots ]; then
         mkdir /home/.snapshots
         btrfs subvolume create /var/btrfs/@home-snapshots
-        mount -t btrfs -o subvol=@home-snapshots /dev/mapper/lvm /home/.snapshots
+        mount -t btrfs -o subvol=@home-snapshots /dev/mapper/root /home/.snapshots
         genfstab -U -f /home/.snapshots / >> /etc/fstab
     fi
     if [ ! -d /.snapshots ]; then
         mkdir /.snapshots
         btrfs subvolume create /var/btrfs/@root-snapshots
-        mount -t btrfs -o subvol=@home-snapshots /dev/mapper/lvm /.snapshots
+        mount -t btrfs -o subvol=@home-snapshots /dev/mapper/root /.snapshots
         genfstab -U -f /.snapshots / >> /etc/fstab
     fi
     systemctl enable --now snapper-backup
