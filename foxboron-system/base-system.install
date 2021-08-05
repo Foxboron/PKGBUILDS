@@ -1,4 +1,3 @@
-
 _setup_aurutils(){
     # We only have one user....
     install -d /var/cache/pacman/aur -o 1000
@@ -7,8 +6,8 @@ _setup_aurutils(){
 
 _setup_misc_laptop(){
     # tlp
-    systemctl enable --now tlp
-    systemctl enable tlp-sleep.service
+    # systemctl enable --now tlp
+    # systemctl enable tlp-sleep.service
     systemctl mask systemd-rfkill.socket
 }
 
@@ -37,7 +36,7 @@ _btrfs_mksubvol(){
     btrfs subvolume create "/var/btrfs/$2"
     genfstab -U -f "$1" >> /etc/fstab
     mkdir /$1_tmp
-    mv -f /$1/ /$1_tmp
+    cp --reflink=auto /$1/ /$1_tmp
     mount -t btrfs -o subvol="$2" /dev/mapper/root "$1"
 }
 

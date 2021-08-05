@@ -89,48 +89,59 @@ sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             'e03ee1956c15ab4041dc5a29c978d0017ac5d8bce782f813b55bd0193fa7672e'
             '9e17874e5db1bc22a2fdc5bbb1902069f545f82d926db0ab7df6c962925f3178')
 
-package_foxboron-packages(){
-    depend=(
-	# xorg
-	'xorg-server' 'xorg-setxkbmap' 'xorg-xinit' 'xorg-xset'
-	'intel-ucode' 'xorg-xrandr'
+package_base-packages(){
+    depends=(
+        'base' 'base-devel'
+        'linux' 'linux-firmware'
 
-	# DE
-	'i3-gaps' 'xorg-xset' 'i3lock' 'redshift' 'alacritty' 'feh'
-	'dunst' 'redshift' 'playerctl' 'noto-fonts' 'unclutter'
-	'picom' 'rofi' 'ttf-dejavu' 'xdotool'
-	'pavucontrol' 'qutebrowser' 'chromium' 'xss-lock'
-	
-	# System
-	'tlp' 'udiskie' 'usbguard' 'lm_sensors'
+        # xorg
+        'xorg-server' 'xorg-setxkbmap' 'xorg-xinit' 'xorg-xset'
+        'intel-ucode' 'xorg-xrandr'
+
+        # DE
+        'i3-gaps' 'xorg-xset' 'i3lock' 'redshift' 'alacritty' 'feh'
+        'dunst' 'redshift' 'playerctl' 'noto-fonts' 'unclutter'
+        'picom' 'rofi' 'ttf-dejavu' 'xdotool' 'i3blocks'
+        'pavucontrol' 'qutebrowser' 'chromium' 'xss-lock'
+
+        # System
+        'tlp' 'udiskie' 'usbguard' 'lm_sensors'
         'networkmanager' 'zsh' 'fwupd'
-	'bolt' 'wireguard-tools' 'pipewire'
+        'bolt' 'wireguard-tools' 'pipewire'
+        'pipewire-jack' 'pipewire-pulse' 'pipewire-media-session'
 
-	# Utilities
-	'gnupg' 'pass' 'mpv' 'expac' 'xsel'
-	'zathura-pdf-mupdf' 'zathura' 'imv' 'mosh' 'ssh'
-	'htop' 'task' 'yubikey-manager' 'pass-otp'
-	'nvchecker' 'tmux' 'tig' 'git' 'pacman-contrib'
-	'hub' 'darktable' 'github-cli' 'podman' 'podman-docker'
+        # Utilities
+        'gnupg' 'pass' 'mpv' 'expac' 'xsel'
+        'zathura-pdf-mupdf' 'zathura' 'imv' 'mosh' 'openssh'
+        'htop' 'task' 'yubikey-manager' 'pass-otp'
+        'nvchecker' 'tmux' 'tig' 'git' 'pacman-contrib'
+        'hub' 'darktable' 'github-cli' 'podman' 'podman-docker'
         'pacutils'
 
-	# Editor
-	'gvim' 'ctags' 'fzf' 'ripgrep'
+        'bluez' 'bluez-utils'
 
-	# latex
-	# 'biber' 'texlive-bibtexextra' 'texlive-core'
-	# 'texlive-fontsextra' 'texlive-latexextra'
-	# 'zathura' 'zathura-pdfp-mupdf'
-	)
+        # Editor
+        'gvim' 'ctags' 'fzf' 'ripgrep'
+
+        # latex
+        # 'biber' 'texlive-bibtexextra' 'texlive-core'
+        # 'texlive-fontsextra' 'texlive-latexextra'
+        # 'zathura' 'zathura-pdfp-mupdf'
+        )
 }
 
 package_base-system(){
-    install=base-system.install
+    install="$pkgname.install"
+    depends=('base-packages')
     install -dm0750 "$pkgdir"/etc/sudoers.d
     install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/10-system
     install -Dm0644 hook-bootctl-upgrade.hook "$pkgdir"/etc/pacman.d/hooks/100-bootctl-upgrade.hook
     install -Dm0644 NetworkManager.conf "$pkgdir"/etc/NetworkManager/NetworkManager.conf
     install -Dm0644 pacman-aur.conf  "$pkgdir"/etc/pacman.d/aur.conf
+    install -Dm0644 x11-99-keyboard.conf "$pkgdir"/etc/X11/xorg.conf.d/99-keyboard.conf
+    install -Dm0644 x11-99-touchpad-disable.conf "$pkgdir"/etc/X11/xorg.conf.d/99-touchpad-disable.conf
+    install -Dm0644 udev-95-thunderbolt.rules "$pkgdir"/etc/udev/rules.d/95-thunderbolt.rules
+    install -Dm0755 udev-hotplug_monitor "$pkgdir"/usr/bin/hotplug_monitor
     ln -sf /usr/share/zoneinfo/Europe/Oslo "$pkgdir"/etc/localtime
 }
 
@@ -170,7 +181,6 @@ package_theia-system(){
 
 package_anathema-system(){
     depends=('base-system')
-    install -Dm0644 theia-capslock.hwdb "$pkgdir"/etc/udev/hwdb.d/61-theia-capslock.hwdb
     install -Dm0644 x11-99-keyboard.conf "$pkgdir"/etc/X11/xorg.conf.d/99-keyboard.conf
     install -Dm0644 x11-99-touchpad-disable.conf "$pkgdir"/etc/X11/xorg.conf.d/99-touchpad-disable.conf
     install -Dm0644 udev-95-thunderbolt.rules "$pkgdir"/etc/udev/rules.d/95-thunderbolt.rules
