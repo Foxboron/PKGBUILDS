@@ -1,24 +1,32 @@
+_setup_user(){
+    useradd -s /usr/bin/zsh -m -U -G wheel fox
+}
+
 _setup_aurutils(){
     # We only have one user....
     install -d /var/cache/pacman/aur -o 1000
     repo-add /var/cache/pacman/aur/aur.db.tar
 }
 
-_setup_misc_laptop(){
+_setup_systemd(){
     # tlp
     # systemctl enable --now tlp
     # systemctl enable tlp-sleep.service
     systemctl mask systemd-rfkill.socket
+    systemctl enable --now NetworkManager
+    systemctl enable --now systemd-resolved.service
 }
 
 
 _btrfs_setup(){
+    [ -d "/var/btrfs" ] && return
     mkdir /var/btrfs
     mount /dev/mapper/root /var/btrfs || true
     genfstab -U -f /var/btrfs >> /etc/fstab
 }
 
 _btrfs_setup_swap(){
+    [ -d "/var/swap" ] && return
     mkdir /var/swap
     btrfs subvolume create /var/btrfs/@swap
     mount -t btrfs -o subvol=@swap /dev/mapper/root /var/swap
@@ -42,13 +50,15 @@ _btrfs_mksubvol(){
 
 
 post_install () {
+    _setup_user
     _setup_aurutils
+    _setup_systemd
     if [[ "$(stat -f -c %T /)" == btrfs ]]  ; then
-        [ ! -d /var/btrfs ] && _btrfs_setup
-        [ ! -d /var/swap ] && _btrfs_setup_swap
         _btrfs_mksubvol /srv @srv
         _btrfs_mksubvol /var @var
         _btrfs_mksubvol /home @home
         _btrfs_mksubvol /opt @opt
+        _btrfs_setup
+        _btrfs_setup_swap
     fi
 }

@@ -1,93 +1,100 @@
 # Maintainer: Morten Linderud <morten@linderud.pw>
 
 pkgbase=foxboron-system
-pkgname=(
-         'base-system'
-         'theia-system'
+pkgname=('base-system'
+         'base-dotfiles'
          'foxboron-timers'
          'foxboron-backup'
-         'patch-system'
-         )
+         'patch-system')
 pkgver=10
 pkgrel=1
 pkgdesc="System configs"
 arch=("any")
 url="https://linderud.dev/"
 license=('MIT')
-source=('timers-timer@.timer'
-        'timers-timer@.target'
-        'backup-backup'
-        'backup-backup-sudo'
-        'backup-sudoers'
-        'backup-backup@.service'
-        'backup-snapper-filter'
-        'backup-snapper-backup.service'
-        'backup-snap-boot-backup'
+depends=('git')
+source=('git+https://github.com/foxboron/home.git'
+        'acpid-thinkpad-dock-lenovo'
+        'acpid-thinkpad-dock.sh'
+        'acpid-thinkpad-undock-lenovo'
+        'acpid-thinkpad-undock.sh'
         'backup-50_bootbackup.hook'
-        'backup-zz_bootback.hook'
-        'backup-snap-boot-config'
+        'backup-backup'
+        'backup-backup@.service'
         'backup-backup-snapper-cleanup.service'
+        'backup-backup-sudo'
+        'backup-snap-boot-backup'
+        'backup-snap-boot-config'
+        'backup-snapper-backup.service'
+        'backup-snapper-filter'
+        'backup-sudoers'
+        'backup-zz_bootback.hook'
+        'bfq-60-scheduler.rules'
+        'bin-hotplug_monitor'
+        'hook-bootctl-upgrade.hook'
+        'hook-patch-system-configs.hook'
+        'hook-patch-system-configs.scripts'
+        'kernel-cmdline'
+        'NetworkManager.conf'
+        'pacman-aur.conf'
+        'pacman-mirrorlist'
+        'snapper-conf.d'
+        'snapper-home'
+        'snapper-root'
         'system-sudoers'
         'theia-capslock.hwdb'
         'theia-thinkfan.conf'
         'theia-thinkpad_acpi.conf'
-        'acpid-thinkpad-dock-lenovo'
-        'acpid-thinkpad-undock-lenovo'
-        'acpid-thinkpad-dock.sh'
-        'acpid-thinkpad-undock.sh'
-        'x11-99-keyboard.conf'
-        'x11-99-touchpad-disable.conf'
-        'bfq-60-scheduler.rules'
+        'timers-timer@.target'
+        'timers-timer@.timer'
         'udev-95-disable-ir-camera.rules'
         'udev-95-thunderbolt.rules'
-        'bin-hotplug_monitor'
-        'hook-bootctl-upgrade.hook'
-        'pacman-aur.conf'
-        'NetworkManager.conf'
-        'snapper-root'
-        'snapper-home'
-        'snapper-conf.d'
-        'hook-patch-system-configs.hook'
-        'hook-patch-system-configs.scripts'
+        'x11-99-keyboard.conf'
+        'x11-99-touchpad-disable.conf'
 )
 
-sha256sums=('dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
-            '148cffd0796d1fa2b1d9bba9274493bd9cfc2d5a524ffc0e03fc2d6e8e2c53fb'
-            '793647362d8c6bbc665dc5a18537c0479f070d0e4453ceff64f8ed8fadab9faa'
-            'f5252e9184f5469bb7d4091359f752674b5925efe670a19aa65177b7409713b5'
-            '9eae320f6f0842d0692d46020125432350ed25fbddec2d9829d16ca7f43991c5'
-            'fba676be6530edb1f4db5bc4bf7ea9ddcd8209822b797bd0f45e7fce5bbb940c'
-            'b17747590458e5e540fad94dc046348f32b4e84565078c5609a824784163f6d2'
-            'fde7844e13e00125ad13bd87e0bc3f2347ce7424c054b1e2ade44ea05e1176fd'
-            '48ee59b2d3d2c6839825177a31f7efa6b4f4c7d43139409d63676c7955affb0b'
+sha256sums=('SKIP'
+            '16f2124165aaeea64670460718b1f0e826483d4e8b4f2aceb09ab145db3b542d'
+            'fe508fb33786cda8f858f5a1e804b4f8cea13b523e99e857dcf66b49ad7d1965'
+            'fe14f948f05526499db04831cd01c12f80ffac33176142d5bc9b39f3fecedf33'
+            '64d013589348bb5ca5767284b179188bc6f4761b3846590a10e9c3b809672480'
             '6856ba88cb90e2f0133c81e26214bd4c4a0c1990a12ebbd34b4cda088be4cf8d'
-            '400935dff56e2f8e00fad3e24025f08924722f2fbe023d75d755bc19ca4e4fbd'
-            '2a978ea589fa3647d6156bdd054c5c76828b8934c832423f9d3a3db9e5e5019a'
+            '793647362d8c6bbc665dc5a18537c0479f070d0e4453ceff64f8ed8fadab9faa'
+            'fba676be6530edb1f4db5bc4bf7ea9ddcd8209822b797bd0f45e7fce5bbb940c'
             '08e1d51e9559f89f8d6a57a3134b05295d8ace56cddac3aa97a0f3792b68ee91'
+            'f5252e9184f5469bb7d4091359f752674b5925efe670a19aa65177b7409713b5'
+            '48ee59b2d3d2c6839825177a31f7efa6b4f4c7d43139409d63676c7955affb0b'
+            '2a978ea589fa3647d6156bdd054c5c76828b8934c832423f9d3a3db9e5e5019a'
+            'fde7844e13e00125ad13bd87e0bc3f2347ce7424c054b1e2ade44ea05e1176fd'
+            'b17747590458e5e540fad94dc046348f32b4e84565078c5609a824784163f6d2'
+            '9eae320f6f0842d0692d46020125432350ed25fbddec2d9829d16ca7f43991c5'
+            '400935dff56e2f8e00fad3e24025f08924722f2fbe023d75d755bc19ca4e4fbd'
+            '24f196f2369798d8c495d1b811aa13885eef28dc0c7be614d2ac2ee679f4f4f7'
+            '593b49b294d4a2c4b58f2c7f72d6bfbb43ec92f446b568bdea8d1949ab7ff2b0'
+            '3295c32224753a6f1d409b7de810af63c3fd1d987c193486caae84c8b66ba2c2'
+            'e03ee1956c15ab4041dc5a29c978d0017ac5d8bce782f813b55bd0193fa7672e'
+            '685fb6ce4aec2c8e158fc27c8fb91533e042b00a514af15b45ade43bf2fb07f8'
+            'ce3abbbc9582db7cce86b589c89125d84d80ffdacdda7f8c110062aa4d523617'
+            '2c1ccf551e29d2925ab6cbea3d7a361e6f6218a12bf1e99e870ad605962a8105'
+            '7c441eeccea11b5a5ed6c4a4311e33a18930437ba40414289e223612c1d328c9'
+            '4f09d8e3cffdd37c5c471873fcbfa5359060ad54c6a0f34df0862dd112c09647'
+            '76097926beead2ec82bc0da042ba1d5013d745d3d8d90239e9cecac32b174f6a'
+            '408efa4f9eceedcb2a3acffc126f96ffc890abb0bdc55844f50257490d7d18b4'
+            'e8b40c151eb20db7cff213de28a63a9f8fa69ba371842ea18fcab11265ed2b87'
             '053e38a80a8162450b9e145c119b9cee0385a869b26d24bb3f681bff78137592'
-            'e1bce4e528671b51d57a082d10f903c11ec287a96d1ca0acdad9d13dc6d6c04f'
             '825f6500e22b3f8a9ecde110cb14c51a97399481b33123981d1f950dccc268a3'
             '2e15377025beca05b6a1f82bf7e17da3389bae718a5d720384b2ff72bbeb9ec2'
             '28874576641b3cc1aa486e1bc9ed40eadfe8b13d6d3014016e31fedc5dc5195f'
-            'd685385b3a92fbac8f0c63175ae0a0f97b724c5a774f0452c884693902f5e1bf'
-            '16f2124165aaeea64670460718b1f0e826483d4e8b4f2aceb09ab145db3b542d'
-            'fe14f948f05526499db04831cd01c12f80ffac33176142d5bc9b39f3fecedf33'
-            'fe508fb33786cda8f858f5a1e804b4f8cea13b523e99e857dcf66b49ad7d1965'
-            '64d013589348bb5ca5767284b179188bc6f4761b3846590a10e9c3b809672480'
-            '477185de77c1cff69e9b7c9e5451fc71294c00c407726f87e29324f34379c01f'
-            'a351326781889d172747b1f71bb5de968054daafc8b562920e15a576a85418dc'
-            '24f196f2369798d8c495d1b811aa13885eef28dc0c7be614d2ac2ee679f4f4f7'
+            '148cffd0796d1fa2b1d9bba9274493bd9cfc2d5a524ffc0e03fc2d6e8e2c53fb'
+            'dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
             '4522cbcc44872e5816a4aa7db19b8aff402ec1c4fbdad05d645afb3233461356'
             '586e528f06337f2ddac6ae813da6acc41d5aff99510815083d2b6ba75048b8e6'
-            '593b49b294d4a2c4b58f2c7f72d6bfbb43ec92f446b568bdea8d1949ab7ff2b0'
-            '3295c32224753a6f1d409b7de810af63c3fd1d987c193486caae84c8b66ba2c2'
-            '7c441eeccea11b5a5ed6c4a4311e33a18930437ba40414289e223612c1d328c9'
-            '2c1ccf551e29d2925ab6cbea3d7a361e6f6218a12bf1e99e870ad605962a8105'
-            'e8b40c151eb20db7cff213de28a63a9f8fa69ba371842ea18fcab11265ed2b87'
-            '408efa4f9eceedcb2a3acffc126f96ffc890abb0bdc55844f50257490d7d18b4'
-            '76097926beead2ec82bc0da042ba1d5013d745d3d8d90239e9cecac32b174f6a'
-            'e03ee1956c15ab4041dc5a29c978d0017ac5d8bce782f813b55bd0193fa7672e'
-            '9e17874e5db1bc22a2fdc5bbb1902069f545f82d926db0ab7df6c962925f3178')
+            '477185de77c1cff69e9b7c9e5451fc71294c00c407726f87e29324f34379c01f'
+            'a351326781889d172747b1f71bb5de968054daafc8b562920e15a576a85418dc'
+            '7611d5661ecbc653849f5661980d76c0381536975626290e870c4ff0ff882081'
+            'b28f6a2b15618d35b6436f7c78f75c84daf6177b74bace6770481535d78fca8d'
+            'f7ab20c18301b6ac42bffa556aa4071e2c49973bf5034cdb148d0ba2a9ce0d6b'
+            '232663ca2b66bc2bb779b962f8cc48fee6bc9da3e3e226aff81be28a3e100e60')
 
 package_base-packages(){
     depends=(
@@ -123,6 +130,8 @@ package_base-packages(){
         # Editor
         'gvim' 'ctags' 'fzf' 'ripgrep'
 
+        'neomutt' 'notmuch' 'afew' 'msmtp'
+
         # latex
         # 'biber' 'texlive-bibtexextra' 'texlive-core'
         # 'texlive-fontsextra' 'texlive-latexextra'
@@ -130,18 +139,28 @@ package_base-packages(){
         )
 }
 
+
+package_base-dotfiles(){
+    install -dm0755 "$pkgdir"/etc/skel
+    cd home
+    cp -r . "$pkgdir"/etc/skel/
+    mv "$pkgdir"/etc/skel/.git "$pkgdir"/etc/skel/.config/home.git
+}
+
 package_base-system(){
     install="$pkgname.install"
     depends=('base-packages')
-    install -dm0750 "$pkgdir"/etc/sudoers.d
-    install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/10-system
+    install -Dm0755 bin-hotplug_monitor "$pkgdir"/usr/bin/hotplug_monitor
+    install -Dm0644 pacman-mirrorlist "$pkgdir/usr/share/system-config/pacman/mirrorlist"
+    install -Dm0644 kernel-cmdline "$pkgdir/usr/share/system-config/pacman/mirrorlist"
     install -Dm0644 hook-bootctl-upgrade.hook "$pkgdir"/etc/pacman.d/hooks/100-bootctl-upgrade.hook
     install -Dm0644 NetworkManager.conf "$pkgdir"/etc/NetworkManager/NetworkManager.conf
     install -Dm0644 pacman-aur.conf  "$pkgdir"/etc/pacman.d/aur.conf
     install -Dm0644 x11-99-keyboard.conf "$pkgdir"/etc/X11/xorg.conf.d/99-keyboard.conf
     install -Dm0644 x11-99-touchpad-disable.conf "$pkgdir"/etc/X11/xorg.conf.d/99-touchpad-disable.conf
     install -Dm0644 udev-95-thunderbolt.rules "$pkgdir"/etc/udev/rules.d/95-thunderbolt.rules
-    install -Dm0755 udev-hotplug_monitor "$pkgdir"/usr/bin/hotplug_monitor
+    install -dm0750 "$pkgdir"/etc/sudoers.d
+    install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/10-system
     ln -sf /usr/share/zoneinfo/Europe/Oslo "$pkgdir"/etc/localtime
 }
 
@@ -154,15 +173,6 @@ package_patch-system(){
     for p in ${_patch_system[@]}; do
         install -Dm0644 "$p" "$pkgdir/usr/share/system-config/patches/${p#patch-}"
     done
-}
-
-package_foxboron-mail(){
-    depends=('base-system' 'neomutt' 'notmuch' 'afew' 'msmtp')
-    install -Dm644 mail.timer  "$pkgdir"/etc/systemd/user/
-    install -Dm644 mail.target  "$pkgdir"/etc/systemd/user/
-    install -Dm644 offlineimap.service  "$pkgdir"/etc/systemd/user/
-    install -Dm644 afew.service  "$pkgdir"/etc/systemd/user/
-    install -Dm644 notmuch.service  "$pkgdir"/etc/systemd/user/
 }
 
 package_theia-system(){

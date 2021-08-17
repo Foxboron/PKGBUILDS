@@ -1,6 +1,0 @@
-[Unit]
-Description=msmtp update fingerprints
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/msmtp-update-fingerprints
