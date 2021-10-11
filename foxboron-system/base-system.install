@@ -1,5 +1,5 @@
 _setup_user(){
-    useradd -s /usr/bin/zsh -m -U -G wheel fox
+    useradd -s /usr/bin/zsh -m -U -G wheel,network,realtime,docker,wheel,lxd,i2c fox
 }
 
 _setup_aurutils(){
@@ -43,9 +43,10 @@ _btrfs_mksubvol(){
     [ -d "$1" ] && return
     btrfs subvolume create "/var/btrfs/$2"
     genfstab -U -f "$1" >> /etc/fstab
-    mkdir /$1_tmp
-    cp --reflink=auto /$1/ /$1_tmp
+    mkdir -p $1_tmp
+    cp --reflink=auto $1/ $1_tmp
     mount -t btrfs -o subvol="$2" /dev/mapper/root "$1"
+    cp --reflink=auto $1_tmp/ $1/
 }
 
 

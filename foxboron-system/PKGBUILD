@@ -75,7 +75,7 @@ sha256sums=('SKIP'
             'e03ee1956c15ab4041dc5a29c978d0017ac5d8bce782f813b55bd0193fa7672e'
             '685fb6ce4aec2c8e158fc27c8fb91533e042b00a514af15b45ade43bf2fb07f8'
             'ce3abbbc9582db7cce86b589c89125d84d80ffdacdda7f8c110062aa4d523617'
-            '2c1ccf551e29d2925ab6cbea3d7a361e6f6218a12bf1e99e870ad605962a8105'
+            'cd483f26f69285ff300047cd75fbd8e89f99da970476a14a483e9851e3acf606'
             '7c441eeccea11b5a5ed6c4a4311e33a18930437ba40414289e223612c1d328c9'
             '4f09d8e3cffdd37c5c471873fcbfa5359060ad54c6a0f34df0862dd112c09647'
             '76097926beead2ec82bc0da042ba1d5013d745d3d8d90239e9cecac32b174f6a'
@@ -105,6 +105,8 @@ package_base-packages(){
         'xorg-server' 'xorg-setxkbmap' 'xorg-xinit' 'xorg-xset'
         'intel-ucode' 'xorg-xrandr'
 
+        'grobi' 'ddcutil'
+
         # DE
         'i3-gaps' 'xorg-xset' 'i3lock' 'redshift' 'alacritty' 'feh'
         'dunst' 'redshift' 'playerctl' 'noto-fonts' 'unclutter'
@@ -117,13 +119,15 @@ package_base-packages(){
         'bolt' 'wireguard-tools' 'pipewire'
         'pipewire-jack' 'pipewire-pulse' 'pipewire-media-session'
 
+        'sbctl'
+
         # Utilities
         'gnupg' 'pass' 'mpv' 'expac' 'xsel'
         'zathura-pdf-mupdf' 'zathura' 'imv' 'mosh' 'openssh'
         'htop' 'task' 'yubikey-manager' 'pass-otp'
         'nvchecker' 'tmux' 'tig' 'git' 'pacman-contrib'
         'hub' 'darktable' 'github-cli' 'podman' 'podman-docker'
-        'pacutils'
+        'pacutils' 'pcsclite' 'ccid'
 
         'bluez' 'bluez-utils'
 
@@ -149,16 +153,13 @@ package_base-dotfiles(){
 
 package_base-system(){
     install="$pkgname.install"
-    depends=('base-packages')
-    install -Dm0755 bin-hotplug_monitor "$pkgdir"/usr/bin/hotplug_monitor
+    depends=('base-packages' 'base-dotfiles')
     install -Dm0644 pacman-mirrorlist "$pkgdir/usr/share/system-config/pacman/mirrorlist"
-    install -Dm0644 kernel-cmdline "$pkgdir/usr/share/system-config/pacman/mirrorlist"
-    install -Dm0644 hook-bootctl-upgrade.hook "$pkgdir"/etc/pacman.d/hooks/100-bootctl-upgrade.hook
+    install -Dm0644 kernel-cmdline "$pkgdir/etc/kernel/cmdline"
+    install -Dm0644 hook-bootctl-upgrade.hook "$pkgdir/etc/pacman.d/hooks/100-bootctl-upgrade.hook"
     install -Dm0644 NetworkManager.conf "$pkgdir"/etc/NetworkManager/NetworkManager.conf
     install -Dm0644 pacman-aur.conf  "$pkgdir"/etc/pacman.d/aur.conf
     install -Dm0644 x11-99-keyboard.conf "$pkgdir"/etc/X11/xorg.conf.d/99-keyboard.conf
-    install -Dm0644 x11-99-touchpad-disable.conf "$pkgdir"/etc/X11/xorg.conf.d/99-touchpad-disable.conf
-    install -Dm0644 udev-95-thunderbolt.rules "$pkgdir"/etc/udev/rules.d/95-thunderbolt.rules
     install -dm0750 "$pkgdir"/etc/sudoers.d
     install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/10-system
     ln -sf /usr/share/zoneinfo/Europe/Oslo "$pkgdir"/etc/localtime

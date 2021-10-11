@@ -1,0 +1,14 @@
+#!/usr/bin/bash -e
+TMPREPO=$(mktemp -d)
+echo "Using $TMPREPO as tmpdir"
+updpkgsums
+env PKGDEST="$TMPREPO" EUID=1000 makepkg -srcf
+repo-add "$TMPREPO/local.db.tar" "$TMPREPO"/*.pkg.tar.zst
+cp /etc/pacman.conf "$TMPREPO/pacman.conf"
+cat << EOF >> "$TMPREPO/pacman.conf"
+
+[local]
+SigLevel = Optional TrustAll
+Server = file:///$TMPREPO
+EOF
+pacstrap -C "$TMPREPO/pacman.conf" -U base-system base-dotfiles patch-system

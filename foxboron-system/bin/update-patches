@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+for f in patch-*.patch; do
+    read -r _ orig_file _ < <(head -1 $f)
+    diff-conf $orig_file
+done
