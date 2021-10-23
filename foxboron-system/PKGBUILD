@@ -7,7 +7,7 @@ pkgname=('base-system'
          'foxboron-timers'
          'foxboron-backup'
          'patch-system')
-pkgver=10
+pkgver=11
 pkgrel=1
 pkgdesc="System configs"
 arch=("any")
@@ -36,7 +36,6 @@ source=('git+https://github.com/foxboron/home.git'
         'hook-patch-system-configs.hook'
         'hook-patch-system-configs.scripts'
         'kernel-cmdline'
-        'NetworkManager.conf'
         'pacman-aur.conf'
         'pacman-mirrorlist'
         'snapper-conf.d'
@@ -76,7 +75,6 @@ sha256sums=('SKIP'
             'e03ee1956c15ab4041dc5a29c978d0017ac5d8bce782f813b55bd0193fa7672e'
             '685fb6ce4aec2c8e158fc27c8fb91533e042b00a514af15b45ade43bf2fb07f8'
             'ce3abbbc9582db7cce86b589c89125d84d80ffdacdda7f8c110062aa4d523617'
-            'cd483f26f69285ff300047cd75fbd8e89f99da970476a14a483e9851e3acf606'
             '7c441eeccea11b5a5ed6c4a4311e33a18930437ba40414289e223612c1d328c9'
             '4f09d8e3cffdd37c5c471873fcbfa5359060ad54c6a0f34df0862dd112c09647'
             '76097926beead2ec82bc0da042ba1d5013d745d3d8d90239e9cecac32b174f6a'
@@ -99,8 +97,9 @@ sha256sums=('SKIP'
 
 package_base-packages(){
     depends=(
-        'base' 'base-devel'
+        'base'
         'linux' 'linux-firmware'
+        'mkinitcpio'
 
         # xorg
         'xorg-server' 'xorg-setxkbmap' 'xorg-xinit' 'xorg-xset'
@@ -158,7 +157,6 @@ package_base-system(){
     install -Dm0644 pacman-mirrorlist "$pkgdir/usr/share/system-config/pacman/mirrorlist"
     install -Dm0644 kernel-cmdline "$pkgdir/etc/kernel/cmdline"
     install -Dm0644 hook-bootctl-upgrade.hook "$pkgdir/etc/pacman.d/hooks/100-bootctl-upgrade.hook"
-    install -Dm0644 NetworkManager.conf "$pkgdir"/etc/NetworkManager/NetworkManager.conf
     install -Dm0644 pacman-aur.conf  "$pkgdir"/etc/pacman.d/aur.conf
     install -Dm0644 x11-99-keyboard.conf "$pkgdir"/etc/X11/xorg.conf.d/99-keyboard.conf
     install -dm0750 "$pkgdir"/etc/sudoers.d
