@@ -2,6 +2,7 @@
 
 pkgbase=foxboron-system
 pkgname=('base-system'
+         'base-packages'
          'base-dotfiles'
          'foxboron-timers'
          'foxboron-backup'
