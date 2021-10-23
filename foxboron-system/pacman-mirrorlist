@@ -1,0 +1,4 @@
+Server = https://archlinux.uib.no/$repo/os/$arch
+Server = https://mirror.archlinux.no/$repo/os/$arch
+Server = https://mirror.neuf.no/archlinux/$repo/os/$arch
+Server = https://mirror.terrahost.no/linux/archlinux/
