@@ -1,6 +1,0 @@
-SUBSYSTEM!="usb", GOTO="usb_end"
-ACTION=="remove", GOTO="usb_end"
-
-ACTION=="add", ATTR{idVendor}=="04f2", ATTR{idProduct}=="b615", ATTR{authorized}="0", GOTO="usb_end"
-
-LABEL="usb_end"
