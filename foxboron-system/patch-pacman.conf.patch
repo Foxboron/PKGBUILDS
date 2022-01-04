@@ -1,6 +1,20 @@
---- /etc/pacman.conf	2021-07-09 18:37:11.257162082 +0200
-+++ /etc/pacman.conf	2021-07-09 18:37:01.567067769 +0200
-@@ -22,7 +22,7 @@
+--- /etc/pacman.conf	2022-01-04 23:33:57.961969942 +0100
++++ /etc/pacman.conf	2022-01-04 23:06:50.046820696 +0100
+@@ -11,18 +11,19 @@
+ # If you wish to use different paths, uncomment and update the paths.
+ #RootDir     = /
+ #DBPath      = /var/lib/pacman/
+-#CacheDir    = /var/cache/pacman/pkg/
++CacheDir    = /var/cache/pacman/pkg/
++CacheDir    = /srv/pub.linderud.dev/repos/aur/
+ #LogFile     = /var/log/pacman.log
+ #GPGDir      = /etc/pacman.d/gnupg/
+ #HookDir     = /etc/pacman.d/hooks/
+ HoldPkg     = pacman glibc
+ #XferCommand = /usr/bin/curl -L -C - -f -o %o %u
+ #XferCommand = /usr/bin/wget --passive-ftp -c -O %o %u
+-#CleanMethod = KeepInstalled
++CleanMethod = KeepCurrent
  Architecture = auto
  
  # Pacman won't upgrade packages listed in IgnorePkg and members of IgnoreGroup
@@ -9,7 +23,7 @@
  #IgnoreGroup =
  
  #NoUpgrade   =
-@@ -30,11 +30,11 @@
+@@ -30,11 +31,11 @@
  
  # Misc options
  #UseSyslog
@@ -23,7 +37,7 @@
  
  # By default, pacman accepts packages signed by keys that its local keyring
  # trusts (see pacman-key and its man page), as well as unsigned packages.
-@@ -69,8 +69,8 @@
+@@ -69,8 +70,8 @@
  # repo name header and Include lines. You can add preferred servers immediately
  # after the header, and they will be used before the default mirrors.
  
@@ -34,7 +48,7 @@
  
  [core]
  Include = /etc/pacman.d/mirrorlist
-@@ -78,8 +78,8 @@
+@@ -78,23 +79,18 @@
  [extra]
  Include = /etc/pacman.d/mirrorlist
  
@@ -45,10 +59,10 @@
  
  [community]
  Include = /etc/pacman.d/mirrorlist
-@@ -87,14 +87,18 @@
- # If you want to run 32 bit applications on your x86_64 system,
- # enable the multilib repositories as required here.
  
+-# If you want to run 32 bit applications on your x86_64 system,
+-# enable the multilib repositories as required here.
+-
 -#[multilib-testing]
 -#Include = /etc/pacman.d/mirrorlist
 +[multilib-testing]
@@ -59,12 +73,11 @@
 +[multilib]
 +Include = /etc/pacman.d/mirrorlist
  
- # An example of a custom package repository.  See the pacman manpage for
- # tips on creating your own repositories.
- #[custom]
- #SigLevel = Optional TrustAll
- #Server = file:///home/custompkgs
-+
+-# An example of a custom package repository.  See the pacman manpage for
+-# tips on creating your own repositories.
+-#[custom]
+-#SigLevel = Optional TrustAll
+-#Server = file:///home/custompkgs
 +[aur]
-+SigLevel = Optional TrustAll
-+Server = file:///var/cache/pacman/aur
++Server = file:///srv/pub.linderud.dev/repos/aur
++Server = https://pub.linderud.dev/repos/aur/

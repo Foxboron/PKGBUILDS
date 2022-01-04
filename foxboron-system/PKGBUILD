@@ -14,13 +14,7 @@ arch=("any")
 url="https://linderud.dev/"
 license=('MIT')
 depends=('git')
-source=('git+https://github.com/foxboron/home.git'
-        'acpid-thinkpad-dock-lenovo'
-        'acpid-thinkpad-dock.sh'
-        'acpid-thinkpad-undock-lenovo'
-        'acpid-thinkpad-undock.sh'
-        'backup-50_bootbackup.hook'
-        'backup-backup'
+source=('backup-backup'
         'backup-backup@.service'
         'backup-backup-snapper-cleanup.service'
         'backup-backup-sudo'
@@ -29,12 +23,10 @@ source=('git+https://github.com/foxboron/home.git'
         'backup-snapper-backup.service'
         'backup-snapper-filter'
         'backup-sudoers'
-        'backup-zz_bootback.hook'
-        'bfq-60-scheduler.rules'
-        'bin-hotplug_monitor'
         'hook-bootctl-upgrade.hook'
         'hook-patch-system-configs.hook'
         'hook-patch-system-configs.scripts'
+        'mkinitcpio-linux.preset'
         'kernel-cmdline'
         'pacman-aur.conf'
         'pacman-mirrorlist'
@@ -42,24 +34,12 @@ source=('git+https://github.com/foxboron/home.git'
         'snapper-home'
         'snapper-root'
         'system-sudoers'
-        'theia-capslock.hwdb'
-        'theia-thinkfan.conf'
-        'theia-thinkpad_acpi.conf'
         'timers-timer@.target'
         'timers-timer@.timer'
-        'udev-95-disable-ir-camera.rules'
-        'udev-95-thunderbolt.rules'
         'x11-99-keyboard.conf'
-        'x11-99-touchpad-disable.conf'
 )
 
-sha256sums=('SKIP'
-            '16f2124165aaeea64670460718b1f0e826483d4e8b4f2aceb09ab145db3b542d'
-            'fe508fb33786cda8f858f5a1e804b4f8cea13b523e99e857dcf66b49ad7d1965'
-            'fe14f948f05526499db04831cd01c12f80ffac33176142d5bc9b39f3fecedf33'
-            '64d013589348bb5ca5767284b179188bc6f4761b3846590a10e9c3b809672480'
-            '6856ba88cb90e2f0133c81e26214bd4c4a0c1990a12ebbd34b4cda088be4cf8d'
-            '793647362d8c6bbc665dc5a18537c0479f070d0e4453ceff64f8ed8fadab9faa'
+sha256sums=('793647362d8c6bbc665dc5a18537c0479f070d0e4453ceff64f8ed8fadab9faa'
             'fba676be6530edb1f4db5bc4bf7ea9ddcd8209822b797bd0f45e7fce5bbb940c'
             '08e1d51e9559f89f8d6a57a3134b05295d8ace56cddac3aa97a0f3792b68ee91'
             'f5252e9184f5469bb7d4091359f752674b5925efe670a19aa65177b7409713b5'
@@ -68,12 +48,10 @@ sha256sums=('SKIP'
             'fde7844e13e00125ad13bd87e0bc3f2347ce7424c054b1e2ade44ea05e1176fd'
             'b17747590458e5e540fad94dc046348f32b4e84565078c5609a824784163f6d2'
             '9eae320f6f0842d0692d46020125432350ed25fbddec2d9829d16ca7f43991c5'
-            '400935dff56e2f8e00fad3e24025f08924722f2fbe023d75d755bc19ca4e4fbd'
-            '24f196f2369798d8c495d1b811aa13885eef28dc0c7be614d2ac2ee679f4f4f7'
-            '593b49b294d4a2c4b58f2c7f72d6bfbb43ec92f446b568bdea8d1949ab7ff2b0'
             '3295c32224753a6f1d409b7de810af63c3fd1d987c193486caae84c8b66ba2c2'
             'e03ee1956c15ab4041dc5a29c978d0017ac5d8bce782f813b55bd0193fa7672e'
             '685fb6ce4aec2c8e158fc27c8fb91533e042b00a514af15b45ade43bf2fb07f8'
+            '5b125dc7f6dfa4b9cbcb77dcdacbf729391a854fc4675cfd33dd4eddac4c535c'
             'ce3abbbc9582db7cce86b589c89125d84d80ffdacdda7f8c110062aa4d523617'
             '7c441eeccea11b5a5ed6c4a4311e33a18930437ba40414289e223612c1d328c9'
             '4f09d8e3cffdd37c5c471873fcbfa5359060ad54c6a0f34df0862dd112c09647'
@@ -81,19 +59,13 @@ sha256sums=('SKIP'
             '408efa4f9eceedcb2a3acffc126f96ffc890abb0bdc55844f50257490d7d18b4'
             'e8b40c151eb20db7cff213de28a63a9f8fa69ba371842ea18fcab11265ed2b87'
             '053e38a80a8162450b9e145c119b9cee0385a869b26d24bb3f681bff78137592'
-            '825f6500e22b3f8a9ecde110cb14c51a97399481b33123981d1f950dccc268a3'
-            '2e15377025beca05b6a1f82bf7e17da3389bae718a5d720384b2ff72bbeb9ec2'
-            '28874576641b3cc1aa486e1bc9ed40eadfe8b13d6d3014016e31fedc5dc5195f'
             '148cffd0796d1fa2b1d9bba9274493bd9cfc2d5a524ffc0e03fc2d6e8e2c53fb'
             'dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
-            '4522cbcc44872e5816a4aa7db19b8aff402ec1c4fbdad05d645afb3233461356'
-            '586e528f06337f2ddac6ae813da6acc41d5aff99510815083d2b6ba75048b8e6'
             '477185de77c1cff69e9b7c9e5451fc71294c00c407726f87e29324f34379c01f'
-            'a351326781889d172747b1f71bb5de968054daafc8b562920e15a576a85418dc'
-            '7611d5661ecbc653849f5661980d76c0381536975626290e870c4ff0ff882081'
+            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
             'b28f6a2b15618d35b6436f7c78f75c84daf6177b74bace6770481535d78fca8d'
-            'f7ab20c18301b6ac42bffa556aa4071e2c49973bf5034cdb148d0ba2a9ce0d6b'
-            '232663ca2b66bc2bb779b962f8cc48fee6bc9da3e3e226aff81be28a3e100e60')
+            'c80d58d30bf231bb696cabf792f6959dce52083209c99f0057334b1871500251'
+            '0e640b1d5e9a154c194233f9e4edc1e456c5062d4303785b30eb70d708ecacc0')
 
 package_base-packages(){
     depends=(
@@ -126,8 +98,8 @@ package_base-packages(){
         'zathura-pdf-mupdf' 'zathura' 'imv' 'mosh' 'openssh'
         'htop' 'task' 'yubikey-manager' 'pass-otp'
         'nvchecker' 'tmux' 'tig' 'git' 'pacman-contrib'
-        'hub' 'darktable' 'github-cli' 'podman' 'podman-docker'
-        'pacutils' 'pcsclite' 'ccid'
+        'hub' 'darktable' 'github-cli' 'podman' 'docker'
+        'pacutils' 'pcsclite' 'ccid' 'lxd' 'libfido2' 'efibootmgr'
 
         'bluez' 'bluez-utils'
 
@@ -145,9 +117,7 @@ package_base-packages(){
 
 
 package_base-dotfiles(){
-    install -dm0755 "$pkgdir"/etc/skel
-    cd home
-    cp -r . "$pkgdir"/etc/skel/
+    git clone 'https://github.com/foxboron/home.git' "$pkgdir"/etc/skel
     mv "$pkgdir"/etc/skel/.git "$pkgdir"/etc/skel/.config/home.git
 }
 
@@ -156,6 +126,7 @@ package_base-system(){
     depends=('base-packages' 'base-dotfiles')
     install -Dm0644 pacman-mirrorlist "$pkgdir/usr/share/system-config/pacman/mirrorlist"
     install -Dm0644 kernel-cmdline "$pkgdir/etc/kernel/cmdline"
+    install -Dm0644 mkinitcpio-linux.preset "$pkgdir/etc/mkinitcpio.d/linux.preset"
     install -Dm0644 hook-bootctl-upgrade.hook "$pkgdir/etc/pacman.d/hooks/100-bootctl-upgrade.hook"
     install -Dm0644 pacman-aur.conf  "$pkgdir"/etc/pacman.d/aur.conf
     install -Dm0644 x11-99-keyboard.conf "$pkgdir"/etc/X11/xorg.conf.d/99-keyboard.conf

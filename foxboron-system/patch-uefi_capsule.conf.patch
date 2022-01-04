@@ -1,6 +1,6 @@
---- /etc/fwupd/uefi_capsule.conf	2021-07-09 18:26:04.057223650 +0200
-+++ /etc/fwupd/uefi_capsule.conf	2021-02-20 12:34:39.798585762 +0100
-@@ -2,7 +2,7 @@
+--- /etc/fwupd/uefi_capsule.conf	2022-01-04 23:33:58.158638824 +0100
++++ /etc/fwupd/uefi_capsule.conf	2021-08-07 00:19:51.324115971 +0200
+@@ -5,7 +5,7 @@
  
  # the shim loader is required to chainload the fwupd EFI binary unless
  # the fwupd.efi file has been self-signed manually

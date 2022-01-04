@@ -4,8 +4,8 @@ _setup_user(){
 
 _setup_aurutils(){
     # We only have one user....
-    install -d /var/cache/pacman/aur -o 1000
-    repo-add /var/cache/pacman/aur/aur.db.tar
+    install -d /srv/pub.linderud.dev/repos/aur -o 1000
+    repo-add /srv/pub.linderud.dev/repos/aur
 }
 
 _setup_systemd(){
@@ -15,6 +15,12 @@ _setup_systemd(){
     systemctl mask systemd-rfkill.socket
     systemctl enable --now NetworkManager
     systemctl enable --now systemd-resolved.service
+    systemctl enable --now auditd
+    systemctl enable --now bolt
+    systemctl enable --now bluetooth
+    systemctl enable --now udisks2.service
+    systemctl enable --now btrfs-scrub@-.timer
+    systemctl enable --now btrfs-scrub@home.timer
 }
 
 
@@ -43,16 +49,16 @@ _btrfs_mksubvol(){
     [ -d "$1" ] && return
     btrfs subvolume create "/var/btrfs/$2"
     genfstab -U -f "$1" >> /etc/fstab
-    mkdir -p $1_tmp
-    cp --reflink=auto $1/ $1_tmp
+    mkdir -p "$1_tmp"
+    cp --reflink=auto "$1/" "$1_tmp/"
     mount -t btrfs -o subvol="$2" /dev/mapper/root "$1"
-    cp --reflink=auto $1_tmp/ $1/
+    cp --reflink=auto "$1_tmp/" "$1/"
+    rm -rf "$1_tmp"
 }
 
 
 post_install () {
     _setup_user
-    _setup_aurutils
     _setup_systemd
     if [[ "$(stat -f -c %T /)" == btrfs ]]  ; then
         _btrfs_mksubvol /srv @srv
@@ -62,4 +68,5 @@ post_install () {
         _btrfs_setup
         _btrfs_setup_swap
     fi
+    _setup_aurutils
 }
