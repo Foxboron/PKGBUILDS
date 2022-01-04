@@ -1,6 +1,10 @@
 #!/usr/bin/bash
-
+TMPFILE=$(mktemp -d /var/tmp/patches.XXXX)
 for f in patch-*.patch; do
     read -r _ orig_file _ < <(head -1 $f)
-    diff-conf $orig_file
+    diff-conf $orig_file > "$TMPFILE/$f"
+    if ! cmp --silent -- <(tail -n+2 "$TMPFILE/$f") <(tail -n+2 "$f"); then
+      printf "Updating %s...\n" "$f"
+      mv "$TMPFILE/$f" "$f"
+    fi
 done
