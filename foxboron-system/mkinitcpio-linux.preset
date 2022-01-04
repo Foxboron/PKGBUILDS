@@ -1,11 +1,11 @@
 # mkinitcpio preset file for the 'linux' package
 
-ALL_config="/etc/mkinitcpio.systemd.conf"
+ALL_config="/etc/mkinitcpio.conf"
 ALL_kver="/boot/vmlinuz-linux"
 ALL_microcode=(/boot/*-ucode.img)
 
 PRESETS=('default')
 
-default_image="/boot/initramfs-linux-systemd.img"
-default_efi_image="/efi/EFI/Linux/systemd-linux.efi"
-default_options="--cmdline /etc/kernel/cmdline.systemd --splash /usr/share/systemd/bootctl/splash-arch.bmp"
+default_image="/boot/initramfs-linux.img"
+default_efi_image="/efi/EFI/Linux/arch-linux.efi"
+default_options="--splash /usr/share/systemd/bootctl/splash-arch.bmp"
