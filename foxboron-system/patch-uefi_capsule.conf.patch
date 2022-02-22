@@ -1,5 +1,5 @@
---- /etc/fwupd/uefi_capsule.conf	2022-01-04 23:33:58.158638824 +0100
-+++ /etc/fwupd/uefi_capsule.conf	2021-08-07 00:19:51.324115971 +0200
+--- /etc/fwupd/uefi_capsule.conf	2022-02-22 22:58:16.338381621 +0100
++++ /etc/fwupd/uefi_capsule.conf	2022-02-21 10:46:09.129979189 +0100
 @@ -5,7 +5,7 @@
  
  # the shim loader is required to chainload the fwupd EFI binary unless
@@ -7,5 +7,5 @@
 -#DisableShimForSecureBoot=true
 +DisableShimForSecureBoot=true
  
- # the EFI system partition path used
- # if this is is not /boot/efi, /boot, or /efi
+ # the EFI system partition (ESP) path used if UDisks is not available
+ # or if this partition is not mounted at /boot/efi, /boot, or /efi

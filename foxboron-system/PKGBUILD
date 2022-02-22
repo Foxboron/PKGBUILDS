@@ -7,7 +7,7 @@ pkgname=('base-system'
          'foxboron-timers'
          'foxboron-backup'
          'patch-system')
-pkgver=11
+pkgver=12
 pkgrel=1
 pkgdesc="System configs"
 arch=("any")
@@ -64,8 +64,8 @@ sha256sums=('793647362d8c6bbc665dc5a18537c0479f070d0e4453ceff64f8ed8fadab9faa'
             '477185de77c1cff69e9b7c9e5451fc71294c00c407726f87e29324f34379c01f'
             'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
             'b28f6a2b15618d35b6436f7c78f75c84daf6177b74bace6770481535d78fca8d'
-            'c80d58d30bf231bb696cabf792f6959dce52083209c99f0057334b1871500251'
-            '0e640b1d5e9a154c194233f9e4edc1e456c5062d4303785b30eb70d708ecacc0')
+            'bb50c7df2929528f33dc19fa8a1303df73f2b53b41756ef0f10d44af937efe0b'
+            '4ce90327224cf8bd32278441743778360db3c1c8358bff98fc54ed71e0934060')
 
 package_base-packages(){
     depends=(
