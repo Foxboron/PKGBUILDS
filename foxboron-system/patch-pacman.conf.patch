@@ -1,5 +1,5 @@
---- /etc/pacman.conf	2022-02-22 22:58:16.128379466 +0100
-+++ /etc/pacman.conf	2022-02-01 09:04:53.603078046 +0100
+--- /etc/pacman.conf
++++ /etc/pacman.conf
 @@ -11,18 +11,19 @@
  # If you wish to use different paths, uncomment and update the paths.
  #RootDir     = /
