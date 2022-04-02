@@ -1,5 +1,5 @@
---- /etc/NetworkManager/NetworkManager.conf	2021-10-23 14:32:59.304370570 +0200
-+++ /etc/NetworkManager/NetworkManager.conf	2021-10-23 14:32:45.914228317 +0200
+--- /etc/NetworkManager/NetworkManager.conf
++++ /etc/NetworkManager/NetworkManager.conf
 @@ -1,2 +1,5 @@
 -# Configuration file for NetworkManager.
 -# See "man 5 NetworkManager.conf" for details.

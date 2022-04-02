@@ -6,7 +6,7 @@
  #DBPath      = /var/lib/pacman/
 -#CacheDir    = /var/cache/pacman/pkg/
 +CacheDir    = /var/cache/pacman/pkg/
-+CacheDir    = /srv/pub.linderud.dev/repos/aur/
++#CacheDir    = /srv/pub.linderud.dev/repos/aur/
  #LogFile     = /var/log/pacman.log
  #GPGDir      = /etc/pacman.d/gnupg/
  #HookDir     = /etc/pacman.d/hooks/
