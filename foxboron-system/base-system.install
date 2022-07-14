@@ -1,5 +1,5 @@
 _setup_user(){
-    useradd -s /usr/bin/zsh -m -U -G wheel,network,realtime,docker,wheel,lxd,i2c fox
+    useradd -s /usr/bin/zsh -m -U -G wheel,network,realtime,docker,wheel,lxd,i2c,tss fox
 }
 
 _setup_aurutils(){
@@ -21,6 +21,7 @@ _setup_systemd(){
     systemctl enable --now udisks2.service
     systemctl enable --now btrfs-scrub@-.timer
     systemctl enable --now btrfs-scrub@home.timer
+    systemctl enable --now pcscd.socket
 }
 
 

@@ -1,10 +1,21 @@
 #!/usr/bin/bash
 TMPFILE=$(mktemp -d /var/tmp/patches.XXXX)
+
 for f in patch-*.patch; do
     read -r _ orig_file _ < <(head -1 $f)
-    diff-conf $orig_file > "$TMPFILE/$f"
-    if ! cmp --silent -- <(tail -n+2 "$TMPFILE/$f") <(tail -n+2 "$f"); then
-      printf "Updating %s...\n" "$f"
-      mv "$TMPFILE/$f" "$f"
+    if [ ! -f $orig_file ]; then
+      printf "File doesn't exist: %s\n" "$orig_file"
+      continue
     fi
+    diff-conf $orig_file > "$TMPFILE/$f"
+done
+
+vifm $TMPFILE
+exit 1
+
+for f in $TMPFILE/*; do
+  if ! cmp --silent -- "$TMPFILE/$f" "$f"; then
+    printf "Updating %s...\n" "$f"
+    mv "$TMPFILE/$f" "$f"
+  fi
 done

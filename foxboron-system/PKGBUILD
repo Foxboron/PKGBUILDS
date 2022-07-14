@@ -7,7 +7,7 @@ pkgname=('base-system'
          'foxboron-timers'
          'foxboron-backup'
          'patch-system')
-pkgver=12
+pkgver=15
 pkgrel=1
 pkgdesc="System configs"
 arch=("any")
@@ -36,6 +36,7 @@ source=('backup-backup'
         'system-sudoers'
         'timers-timer@.target'
         'timers-timer@.timer'
+        'fallback_dns.conf'
         'x11-99-keyboard.conf'
 )
 
@@ -49,47 +50,56 @@ sha256sums=('793647362d8c6bbc665dc5a18537c0479f070d0e4453ceff64f8ed8fadab9faa'
             'b17747590458e5e540fad94dc046348f32b4e84565078c5609a824784163f6d2'
             '9eae320f6f0842d0692d46020125432350ed25fbddec2d9829d16ca7f43991c5'
             '3295c32224753a6f1d409b7de810af63c3fd1d987c193486caae84c8b66ba2c2'
-            'e03ee1956c15ab4041dc5a29c978d0017ac5d8bce782f813b55bd0193fa7672e'
-            '685fb6ce4aec2c8e158fc27c8fb91533e042b00a514af15b45ade43bf2fb07f8'
+            '7c3a6e106692afe60a2b5ed8d032e55a455bf6a0af1a9112fec78d44bb606f68'
+            '95a2022be2bea5082c625f3452e81a51a7bd292f8e90b8a739c6e75569be625b'
             'b269081238fe9191dd5b731b60bdbf1e40c0b2929d92c36920a52097f87f0309'
             'ce3abbbc9582db7cce86b589c89125d84d80ffdacdda7f8c110062aa4d523617'
-            '7c441eeccea11b5a5ed6c4a4311e33a18930437ba40414289e223612c1d328c9'
+            '274385b2c419e41b8bea9126c0cb2cdb1e126ea9ad9912211663590b87c9bbc0'
             '4f09d8e3cffdd37c5c471873fcbfa5359060ad54c6a0f34df0862dd112c09647'
             '76097926beead2ec82bc0da042ba1d5013d745d3d8d90239e9cecac32b174f6a'
-            '408efa4f9eceedcb2a3acffc126f96ffc890abb0bdc55844f50257490d7d18b4'
+            '9471cb91dac1158c74732ce8469dafbcc1abe9e090a94f90f96e223d3e1acc88'
             'e8b40c151eb20db7cff213de28a63a9f8fa69ba371842ea18fcab11265ed2b87'
             '053e38a80a8162450b9e145c119b9cee0385a869b26d24bb3f681bff78137592'
             '148cffd0796d1fa2b1d9bba9274493bd9cfc2d5a524ffc0e03fc2d6e8e2c53fb'
             'dd01c47408e67c0af174345fb1bd92683d509181a0d8bf8fc1e22ba49e79ec24'
+            '47eed2b302b354dc4af4184e65970081bb54e82bf0a56634db47cc61bc0c28ad'
             '477185de77c1cff69e9b7c9e5451fc71294c00c407726f87e29324f34379c01f'
-            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
-            'b28f6a2b15618d35b6436f7c78f75c84daf6177b74bace6770481535d78fca8d'
-            'bb50c7df2929528f33dc19fa8a1303df73f2b53b41756ef0f10d44af937efe0b'
-            '4ce90327224cf8bd32278441743778360db3c1c8358bff98fc54ed71e0934060')
+            'ebb4a0889d18fb8d757d18642a2c03e10a2d99db06e23399d97e012d1898ec58'
+            '135895c76aeab498eab5d80d65bd49c7897f315a8667506511ebc978b8e18e42'
+            '28111b4f1cf1862b0531835b37147dfc9979fc6bf6b5bec43af29e8582112b9b'
+            '73192566b137fbc38487aeb8d0de3fecbf8646b58815c7f3646d8f30c2e3b482'
+            'c5f3b468c6dbc94593afcd90d89eb242fd2fc497f74f173652ab4f589348bcd2'
+            'c74fd40183d416292de3beedf9803d8e6b45bd08177d18c9c1312db9c661dba8'
+            '8f7bb14e31b79b3bf4c187becada41b3cf5370d8d391f8ed476546f89efba53a')
 
 package_base-packages(){
     depends=(
-        'base'
-        'linux' 'linux-firmware'
+        'linux' 'linux-firmware' 'linux-headers'
         'mkinitcpio'
 
         # xorg
         'xorg-server' 'xorg-setxkbmap' 'xorg-xinit' 'xorg-xset'
-        'intel-ucode' 'xorg-xrandr'
+        'intel-ucode' 'xorg-xrandr' 'vulkan-intel' 'libvdpau-va-gl'
 
         'grobi' 'ddcutil'
 
         # DE
         'i3-gaps' 'xorg-xset' 'i3lock' 'redshift' 'alacritty' 'feh'
-        'dunst' 'redshift' 'playerctl' 'noto-fonts' 'unclutter'
+        'dunst' 'redshift' 'playerctl' 'unclutter'
         'picom' 'rofi' 'ttf-dejavu' 'xdotool' 'i3blocks'
         'pavucontrol' 'qutebrowser' 'chromium' 'xss-lock'
+
+        # Python
+        'python-adblock' 'python-requests'
 
         # System
         'tlp' 'udiskie' 'usbguard' 'lm_sensors'
         'networkmanager' 'zsh' 'fwupd'
-        'bolt' 'wireguard-tools' 'pipewire'
-        'pipewire-jack' 'pipewire-pulse' 'pipewire-media-session'
+        'bolt' 'wireguard-tools' 'pipewire' 'pipewire-alsa'
+        'pipewire-jack' 'pipewire-pulse' 'wireplumber'
+        'man-db' 'man-pages'
+
+        'opensc' 'cups'
 
         'sbctl'
 
@@ -100,13 +110,61 @@ package_base-packages(){
         'nvchecker' 'tmux' 'tig' 'git' 'pacman-contrib'
         'hub' 'darktable' 'github-cli' 'podman' 'docker'
         'pacutils' 'pcsclite' 'ccid' 'lxd' 'libfido2' 'efibootmgr'
+        'gopls' 'bc' 'jq' 'barrier' 'tailscale'
+        'mpv' 'acpi' 'ncdu' 'alsa-utils'
+        'k9s' 'kubectl' 'vlc' 'libmicrodns' 'devtools'
+        'meson' 'namcap' 'go' 'pdfjs'
+        'element-desktop' 'discord' 'bind'
+        'barrier' 'flameshot' 'fb-client' 'elinks'
+        'whois' 'asciinema' 'hugo' 'ibus' 'mdbook'
+        'firewalld' 'intel-media-driver' 'nvme-cli'
+        'pcsc-tools' 'toolbox' 'tpm2-tools' 'asp'
+        'zbar' 'strace' 'acpi_call' 'xorg-xev'
+        'smartmontools' 'qbittorrent'
+
+        'go-tools'
+
+        'obs-studio'
+
+        # Go stuff
+        'delve' 'go-tools'
+
+
+
+
+        # Python stuff
+        'python-lsp-server'
+
+        # Qemu packages
+        'qemu-base'
+
+        'debuginfod'
+
+        # Arch misc
+        'archlinux-contrib' 'archlinux-repro' 'pacutils'
+        'pacman-contrib'
 
         'bluez' 'bluez-utils'
+
+        # Camera
+        'v4l2loopback-dkms' 'gphoto2'
 
         # Editor
         'gvim' 'ctags' 'fzf' 'ripgrep'
 
-        'neomutt' 'notmuch' 'afew' 'msmtp'
+        # Video
+        'gst-plugins-good' 'libvdpau-va-gl'
+        
+        # Email
+        'neomutt' 'notmuch' 'afew' 'msmtp' 'offlineimap'
+
+        # Fonts
+        'ttf-hack' 'noto-fonts'
+        'noto-fonts-emoji' 'noto-fonts-cjk' 'noto-fonts-extra'
+
+        'sof-firmware' 'man'
+        'networkmanager-openvpn'
+        'nm-connection-editor'
 
         # latex
         # 'biber' 'texlive-bibtexextra' 'texlive-core'
@@ -128,10 +186,11 @@ package_base-system(){
     install -Dm0644 kernel-cmdline "$pkgdir/etc/kernel/cmdline"
     install -Dm0644 mkinitcpio-linux.preset "$pkgdir/etc/mkinitcpio.d/linux.preset"
     install -Dm0644 hook-bootctl-upgrade.hook "$pkgdir/etc/pacman.d/hooks/100-bootctl-upgrade.hook"
-    install -Dm0644 pacman-aur.conf  "$pkgdir"/etc/pacman.d/aur.conf
+    install -Dm0644 pacman-aur.conf  "$pkgdir"/etc/aurutils/pacman-aur.conf
     install -Dm0644 x11-99-keyboard.conf "$pkgdir"/etc/X11/xorg.conf.d/99-keyboard.conf
     install -dm0750 "$pkgdir"/etc/sudoers.d
     install -Dm0644 system-sudoers "$pkgdir"/etc/sudoers.d/10-system
+    install -Dm0644 fallback_dns.conf "$pkgdir"/etc/systemd/resolved.conf.d/fallback_dns.conf
     ln -sf /usr/share/zoneinfo/Europe/Oslo "$pkgdir"/etc/localtime
 }
 
@@ -147,7 +206,7 @@ package_patch-system(){
 }
 
 package_theia-system(){
-    depends=('base-system' 'acpid')
+    depends=('base-system')
     install -Dm0644 theia-capslock.hwdb "$pkgdir"/etc/udev/hwdb.d/61-theia-capslock.hwdb
     install -Dm0644 theia-thinkfan.conf "$pkgdir"/etc/thinkfan.conf
     install -Dm0644 theia-thinkpad_acpi.conf "$pkgdir"/etc/modprobe.d/thinkpad_acpi.conf

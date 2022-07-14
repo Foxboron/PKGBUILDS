@@ -3,7 +3,12 @@ Operation = Install
 Operation = Upgrade
 Type = File
 Target = etc/pacman.conf
-Target = etc/makepkg.conf
+Target = etc/bluetooth/main.conf
+Target = etc/usbguard/usbguard-daemon.conf
+Target = etc/fwupd/uefi_capsule.conf
+Target = etc/systemd/resolved.conf
+Target = etc/NetworkManager/NetworkManager.conf
+Target = etc/mkinitcpio.conf
 
 [Action]
 Description = Patching system configurations...
